@@ -1,0 +1,12 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it using the metadata in this file."
+type: software
+title: PSO-MDL
+authors:
+  - family-names: Zhu
+    given-names: Haoyu
+version: "1.0.0"
+abstract: >-
+  PSO-MDL is a particle swarm optimization-based maximum drug-likeness approach
+  for molecular descriptor selection and candidate prioritization.
+license: MIT

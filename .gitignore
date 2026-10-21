@@ -1,0 +1,74 @@
+# Generated outputs are rebuilt by Steps 00-04.
+/results/
+
+# Retain only the four explicitly selected from-scratch input groups.
+/data/*
+!/data/README.md
+!/data/private/
+/data/private/*
+!/data/private/candidate_descriptor_parts/
+!/data/private/candidate_manifest.tsv
+!/data/private/reference_descriptors.txt
+!/data/private/reference_manifest.tsv
+/data/private/candidate_descriptor_parts/*
+!/data/private/candidate_descriptor_parts/candidates_part_[0-9][0-9][0-9].txt
+!/data/private/candidate_descriptor_parts/descriptor_parts.json
+
+# Other local/private inputs and intermediate matrices must not be staged.
+/functions/local_*
+/functions/*private*
+candidates_all_*_dragon*.txt
+candidate_molecule_manifest.tsv
+reference_targets*_dragon*.txt
+reference_identity_manifest.tsv
+descriptor_missingness*.tsv
+data01_model.mat
+data02_background.mat
+preprocess_metadata.mat
+dataset_metadata.mat
+dataset_partition.mat
+screening_holdout.tsv
+v4_relative_gap_multiseed_stability.mat
+formal_screening_v4_relative_gap*.mat
+formal_screening_v4_relative_gap*.tsv
+
+# MATLAB caches and local state.
+*.asv
+*.m~
+*.mex*
+/*.mat
+*.fig
+*.log
+*.slxc
+slprj/
+codegen/
+*.prj
+*.mlappinstall
+*.mltbx
+java.opts
+startup.m
+pathdef.m
+/resources/project/
+
+# Editor, operating-system and development artifacts.
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
+*.tmp
+*.bak
+audit_local/
+tmp/
+cache/
+__pycache__/
+*.pyc
+/PUBLIC_RELEASE_AUDIT.md
+/GITHUB_EXECUTION_VERIFICATION.md
+/RESTRUCTURE_REPORT.md
+
+# Credentials must never be staged.
+.env
+.env.*
+*.pem
+*.key

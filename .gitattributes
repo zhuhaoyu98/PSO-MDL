@@ -1,0 +1,15 @@
+* text=auto
+*.m text eol=lf
+*.md text eol=lf
+*.txt text eol=lf
+*.tsv text eol=lf
+*.json text eol=lf
+*.cff text eol=lf
+*.mat -text
+
+# Preserve the validated bytes and SHA-256 values on every platform.
+data/private/candidate_descriptor_parts/*.txt -text
+data/private/candidate_descriptor_parts/descriptor_parts.json -text
+data/private/candidate_manifest.tsv -text
+data/private/reference_descriptors.txt -text
+data/private/reference_manifest.tsv -text

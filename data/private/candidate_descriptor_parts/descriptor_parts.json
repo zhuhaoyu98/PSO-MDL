@@ -1,0 +1,813 @@
+{
+  "Version": 1,
+  "PartCount": 100,
+  "TotalRows": 328841,
+  "DescriptorCount": 3855,
+  "SourceFileName": "candidates_all_328841_dragon3855.txt",
+  "SourceBytes": 10043046953,
+  "SourceSHA256": "01f96c8df3ea096243016dcab6e641ab07719e266014ad56c71c97901d0f5e34",
+  "HeaderSHA256": "9ed71bda0996854755cfa346ce25bcc063ae2593fa043225eac8cb6822486fd7",
+  "Parts": [
+    {
+      "File": "candidates_part_001.txt",
+      "FirstRow": 1,
+      "LastRow": 3290,
+      "Rows": 3290,
+      "Bytes": 100469494,
+      "SHA256": "3a1b1f658e88cf50a56d365b80831c121792544346051bda9d091673618fea74"
+    },
+    {
+      "File": "candidates_part_002.txt",
+      "FirstRow": 3291,
+      "LastRow": 6583,
+      "Rows": 3293,
+      "Bytes": 100468326,
+      "SHA256": "672a67b20c447ac81d0b773498a55033e9ed72061b9cd13a0d301a5bc620d8b1"
+    },
+    {
+      "File": "candidates_part_003.txt",
+      "FirstRow": 6584,
+      "LastRow": 9875,
+      "Rows": 3292,
+      "Bytes": 100461520,
+      "SHA256": "d7b7501c7bd2fb649fadaa73cae05ed2dbad14dadc9c1423f2305b9fbd7fd395"
+    },
+    {
+      "File": "candidates_part_004.txt",
+      "FirstRow": 9876,
+      "LastRow": 13166,
+      "Rows": 3291,
+      "Bytes": 100484005,
+      "SHA256": "7ed5c7220f70bc1fee65b52ab6c587b9729c407310b3ad534dcc5c48cde4d2e4"
+    },
+    {
+      "File": "candidates_part_005.txt",
+      "FirstRow": 13167,
+      "LastRow": 16452,
+      "Rows": 3286,
+      "Bytes": 100444908,
+      "SHA256": "d3979894243d0005ba953e2e38b9a133e0eca4ab89b6c3d48aba4d7def4720a0"
+    },
+    {
+      "File": "candidates_part_006.txt",
+      "FirstRow": 16453,
+      "LastRow": 19736,
+      "Rows": 3284,
+      "Bytes": 100468015,
+      "SHA256": "d98304643de6928fc552148232ab67f842fa5e9e5e3aa7724d73f9de6d2e1239"
+    },
+    {
+      "File": "candidates_part_007.txt",
+      "FirstRow": 19737,
+      "LastRow": 23041,
+      "Rows": 3305,
+      "Bytes": 100488712,
+      "SHA256": "d133db9330bd7470cfdb0d2ce6e51e581c29013c2daeccb0a0e42e5e1500a5af"
+    },
+    {
+      "File": "candidates_part_008.txt",
+      "FirstRow": 23042,
+      "LastRow": 26353,
+      "Rows": 3312,
+      "Bytes": 100439962,
+      "SHA256": "943f0143ed029df8330f3019b996f2b7463205c40db9fc95baea959b4d34795f"
+    },
+    {
+      "File": "candidates_part_009.txt",
+      "FirstRow": 26354,
+      "LastRow": 29643,
+      "Rows": 3290,
+      "Bytes": 100482696,
+      "SHA256": "bb366a1767b678e55ef11d8338b0f1e6a9c5b7f2179e845093e3c42d0da8c270"
+    },
+    {
+      "File": "candidates_part_010.txt",
+      "FirstRow": 29644,
+      "LastRow": 32936,
+      "Rows": 3293,
+      "Bytes": 100462217,
+      "SHA256": "c7865831b27a6d36bbd868012588c441f0d01cbf560252d2b2a42f8be9c5e430"
+    },
+    {
+      "File": "candidates_part_011.txt",
+      "FirstRow": 32937,
+      "LastRow": 36229,
+      "Rows": 3293,
+      "Bytes": 100472928,
+      "SHA256": "5ec6be5c91ecfd1a66244ce61087759ae75e4a221e27c2e9c62de64e43965762"
+    },
+    {
+      "File": "candidates_part_012.txt",
+      "FirstRow": 36230,
+      "LastRow": 39518,
+      "Rows": 3289,
+      "Bytes": 100457605,
+      "SHA256": "ac69e02b0ef79a2c0792de4e672a96931c0ae769322b4bbf0aea18c504510f58"
+    },
+    {
+      "File": "candidates_part_013.txt",
+      "FirstRow": 39519,
+      "LastRow": 42805,
+      "Rows": 3287,
+      "Bytes": 100456409,
+      "SHA256": "126b78b6b08dbcdc43e8c2fc585309f32b45dc0c50ba2b965c8445fbf7189f13"
+    },
+    {
+      "File": "candidates_part_014.txt",
+      "FirstRow": 42806,
+      "LastRow": 46092,
+      "Rows": 3287,
+      "Bytes": 100485705,
+      "SHA256": "429951ea5276108c369957d38dc6f0a542f97b85050dec6797ad89df0f2e51fe"
+    },
+    {
+      "File": "candidates_part_015.txt",
+      "FirstRow": 46093,
+      "LastRow": 49375,
+      "Rows": 3283,
+      "Bytes": 100443605,
+      "SHA256": "abe97a5db0e4a98f86a17da8d0d3a993e0be22716f8a2604f8eea00850ebb287"
+    },
+    {
+      "File": "candidates_part_016.txt",
+      "FirstRow": 49376,
+      "LastRow": 52661,
+      "Rows": 3286,
+      "Bytes": 100482571,
+      "SHA256": "4d66dea31d60c43e2a7aa08075cbab2fbe77f32f14f6839def783963dd8f4c5c"
+    },
+    {
+      "File": "candidates_part_017.txt",
+      "FirstRow": 52662,
+      "LastRow": 55944,
+      "Rows": 3283,
+      "Bytes": 100455929,
+      "SHA256": "1d7c78f56d8547477205a231647df5e2944ee169bfec8a0ac1965096ac3c15cf"
+    },
+    {
+      "File": "candidates_part_018.txt",
+      "FirstRow": 55945,
+      "LastRow": 59228,
+      "Rows": 3284,
+      "Bytes": 100460131,
+      "SHA256": "8d749a9698ae90127828b52a1cd944c828a4c833870a09353669c67c5db11db2"
+    },
+    {
+      "File": "candidates_part_019.txt",
+      "FirstRow": 59229,
+      "LastRow": 62509,
+      "Rows": 3281,
+      "Bytes": 100468636,
+      "SHA256": "c26bc9bc3f4231ada21229ea5d84ac60fae64c97ce4dabfd17a27b894396d8d0"
+    },
+    {
+      "File": "candidates_part_020.txt",
+      "FirstRow": 62510,
+      "LastRow": 65791,
+      "Rows": 3282,
+      "Bytes": 100470712,
+      "SHA256": "889703a66b4789b03ca876104fbbfd1c2259970074e66ddde137e5fcd2e48168"
+    },
+    {
+      "File": "candidates_part_021.txt",
+      "FirstRow": 65792,
+      "LastRow": 69076,
+      "Rows": 3285,
+      "Bytes": 100469337,
+      "SHA256": "9e83eed995eb8cc4ae491ea9252ebf276ddce54220a4e43fd3506077fb07aa74"
+    },
+    {
+      "File": "candidates_part_022.txt",
+      "FirstRow": 69077,
+      "LastRow": 72361,
+      "Rows": 3285,
+      "Bytes": 100459737,
+      "SHA256": "2f8a38b7a0b523e8a93d8473157bc3e6efdda1e375631d84edc5776024bfa9da"
+    },
+    {
+      "File": "candidates_part_023.txt",
+      "FirstRow": 72362,
+      "LastRow": 75645,
+      "Rows": 3284,
+      "Bytes": 100469111,
+      "SHA256": "99813e69790849a7d138f142579d40d28c9c390319467d976fd38f6ed2b22b23"
+    },
+    {
+      "File": "candidates_part_024.txt",
+      "FirstRow": 75646,
+      "LastRow": 78928,
+      "Rows": 3283,
+      "Bytes": 100476578,
+      "SHA256": "b27f0b0abc1f477982677f7bd6d59d1aeb8d702c8725fa43af9f0985583e8f01"
+    },
+    {
+      "File": "candidates_part_025.txt",
+      "FirstRow": 78929,
+      "LastRow": 82216,
+      "Rows": 3288,
+      "Bytes": 100463282,
+      "SHA256": "3e553641e1c16bd92f2b16ba7802465300fa5ebc5b8bb18cbb31fb5226daee97"
+    },
+    {
+      "File": "candidates_part_026.txt",
+      "FirstRow": 82217,
+      "LastRow": 85502,
+      "Rows": 3286,
+      "Bytes": 100468489,
+      "SHA256": "56dbff313fb85a1edc2a2ff29f5ede9bbba3e1a602b144948d605c570b22cb84"
+    },
+    {
+      "File": "candidates_part_027.txt",
+      "FirstRow": 85503,
+      "LastRow": 88783,
+      "Rows": 3281,
+      "Bytes": 100450793,
+      "SHA256": "b82f08ee50c5bf3332a12767ac081118c766ed0a0f2433fe9833f0aa3adce20e"
+    },
+    {
+      "File": "candidates_part_028.txt",
+      "FirstRow": 88784,
+      "LastRow": 92066,
+      "Rows": 3283,
+      "Bytes": 100459434,
+      "SHA256": "d6e5b39b29fccfaad11da24fc5587d27c89c81ee5eedf7719bb6f5208d36f343"
+    },
+    {
+      "File": "candidates_part_029.txt",
+      "FirstRow": 92067,
+      "LastRow": 95344,
+      "Rows": 3278,
+      "Bytes": 100460898,
+      "SHA256": "1bfe83cddcbcc8120d788b0dec1ba2919b171b22cf17b4e4fbeb1bec2170bfef"
+    },
+    {
+      "File": "candidates_part_030.txt",
+      "FirstRow": 95345,
+      "LastRow": 98629,
+      "Rows": 3285,
+      "Bytes": 100483260,
+      "SHA256": "34079bd9c5ad49700452bae5537ecc8be215c0c87c50777e11523d320cad7f73"
+    },
+    {
+      "File": "candidates_part_031.txt",
+      "FirstRow": 98630,
+      "LastRow": 101935,
+      "Rows": 3306,
+      "Bytes": 100466275,
+      "SHA256": "5c5c7d51e82d5565b46d2e1d9b46ce5f2ed5feea3aa71dd1cbff0c231f1981fd"
+    },
+    {
+      "File": "candidates_part_032.txt",
+      "FirstRow": 101936,
+      "LastRow": 105242,
+      "Rows": 3307,
+      "Bytes": 100452793,
+      "SHA256": "75fe9aef01ccde5634153f7ab9ee3885b14b7d8b7f19a6b4c64622a4f333a181"
+    },
+    {
+      "File": "candidates_part_033.txt",
+      "FirstRow": 105243,
+      "LastRow": 108549,
+      "Rows": 3307,
+      "Bytes": 100478157,
+      "SHA256": "9e1ff0f888364feded1346aeae1467313198e7aa07d8eb30834656d09cc2c245"
+    },
+    {
+      "File": "candidates_part_034.txt",
+      "FirstRow": 108550,
+      "LastRow": 111854,
+      "Rows": 3305,
+      "Bytes": 100453691,
+      "SHA256": "c9832d103862a534e48e11d9d0df3ef57d695f42b6fde8ed264c0b812211158c"
+    },
+    {
+      "File": "candidates_part_035.txt",
+      "FirstRow": 111855,
+      "LastRow": 115157,
+      "Rows": 3303,
+      "Bytes": 100479694,
+      "SHA256": "248817bc9f2deb5ec862f2252dfdc7896f082fd0fcd28bbe94eb8cc260f49b8f"
+    },
+    {
+      "File": "candidates_part_036.txt",
+      "FirstRow": 115158,
+      "LastRow": 118457,
+      "Rows": 3300,
+      "Bytes": 100456466,
+      "SHA256": "b9b14d7d197484bdfb8070f98c470deca9a19571294cd52c9d2ea674341e1769"
+    },
+    {
+      "File": "candidates_part_037.txt",
+      "FirstRow": 118458,
+      "LastRow": 121758,
+      "Rows": 3301,
+      "Bytes": 100465753,
+      "SHA256": "9fab98b11df161597debafca01316273d4df346eb1b0de4afbbb274a767b26d0"
+    },
+    {
+      "File": "candidates_part_038.txt",
+      "FirstRow": 121759,
+      "LastRow": 125056,
+      "Rows": 3298,
+      "Bytes": 100449011,
+      "SHA256": "f0ad1afc5f5785d5b622f15e7031a193ca317381e40cc4536e298cf8288fd6e9"
+    },
+    {
+      "File": "candidates_part_039.txt",
+      "FirstRow": 125057,
+      "LastRow": 128350,
+      "Rows": 3294,
+      "Bytes": 100490716,
+      "SHA256": "e111e43a846f6f712bcba3e3d1f26a36ecac6238a762b37c116cf025fdf14a62"
+    },
+    {
+      "File": "candidates_part_040.txt",
+      "FirstRow": 128351,
+      "LastRow": 131640,
+      "Rows": 3290,
+      "Bytes": 100454583,
+      "SHA256": "10a359d063abbccbe74f74f8418d1ca5ef3d0fde56ece47eae2fa07e193afb85"
+    },
+    {
+      "File": "candidates_part_041.txt",
+      "FirstRow": 131641,
+      "LastRow": 134925,
+      "Rows": 3285,
+      "Bytes": 100465281,
+      "SHA256": "94177190995cdc23241531f0d41583a866bcbe4128e18cc5644df056dbc37b36"
+    },
+    {
+      "File": "candidates_part_042.txt",
+      "FirstRow": 134926,
+      "LastRow": 138210,
+      "Rows": 3285,
+      "Bytes": 100458457,
+      "SHA256": "8119913b5e878bc877a4b88bc6e3f4fb4d47403da474d7043d7ef61b3de55fb0"
+    },
+    {
+      "File": "candidates_part_043.txt",
+      "FirstRow": 138211,
+      "LastRow": 141492,
+      "Rows": 3282,
+      "Bytes": 100471089,
+      "SHA256": "7e9f558f0dabce432738d0ea01b18dd360fcd30be13510d67578fd97e4ac8de7"
+    },
+    {
+      "File": "candidates_part_044.txt",
+      "FirstRow": 141493,
+      "LastRow": 144773,
+      "Rows": 3281,
+      "Bytes": 100482836,
+      "SHA256": "172d2a6cc08ba841c112d96ea354ae7e7ddd14e65401affc56737dba0c112f2b"
+    },
+    {
+      "File": "candidates_part_045.txt",
+      "FirstRow": 144774,
+      "LastRow": 148053,
+      "Rows": 3280,
+      "Bytes": 100450040,
+      "SHA256": "1b45cde1a4bc8153e3c1f392f042d19283c5fbd06f697af00061ec99dfa79b7d"
+    },
+    {
+      "File": "candidates_part_046.txt",
+      "FirstRow": 148054,
+      "LastRow": 151335,
+      "Rows": 3282,
+      "Bytes": 100472133,
+      "SHA256": "f4ea016085eab066eba16e4c2d5936bd1855edf0504b0f9bd8cef43438d99589"
+    },
+    {
+      "File": "candidates_part_047.txt",
+      "FirstRow": 151336,
+      "LastRow": 154617,
+      "Rows": 3282,
+      "Bytes": 100464138,
+      "SHA256": "ea90335b7edf2e71269041f991eac2a05568824b5f46112947bb4edf920baf88"
+    },
+    {
+      "File": "candidates_part_048.txt",
+      "FirstRow": 154618,
+      "LastRow": 157910,
+      "Rows": 3293,
+      "Bytes": 100459260,
+      "SHA256": "e2638eba06cbd3fba0723a205c95d93c3b1fc8880de4c4c551c3fe3d3e15ad46"
+    },
+    {
+      "File": "candidates_part_049.txt",
+      "FirstRow": 157911,
+      "LastRow": 161204,
+      "Rows": 3294,
+      "Bytes": 100465782,
+      "SHA256": "1bc6e92436a8cf97319e317a946c1ac55a7feb18d4016043abc3615b748e57ea"
+    },
+    {
+      "File": "candidates_part_050.txt",
+      "FirstRow": 161205,
+      "LastRow": 164485,
+      "Rows": 3281,
+      "Bytes": 100466693,
+      "SHA256": "6fe779bf38e92eb9e385b65f2484a1f3dfc94848edf5351e7d84e6f543e55323"
+    },
+    {
+      "File": "candidates_part_051.txt",
+      "FirstRow": 164486,
+      "LastRow": 167768,
+      "Rows": 3283,
+      "Bytes": 100468665,
+      "SHA256": "ff92caad18e0b31a989810bd898b64e1599854dff99dadd4916ce917ba15d5de"
+    },
+    {
+      "File": "candidates_part_052.txt",
+      "FirstRow": 167769,
+      "LastRow": 171047,
+      "Rows": 3279,
+      "Bytes": 100471118,
+      "SHA256": "1e5c043fd3e9df6af7d172de325866febac990bec833d2cdc80b6430e0a523a5"
+    },
+    {
+      "File": "candidates_part_053.txt",
+      "FirstRow": 171048,
+      "LastRow": 174328,
+      "Rows": 3281,
+      "Bytes": 100450891,
+      "SHA256": "ea2ad912e4556c3be14a072a627a65a699f7140ca52598331cf17a871e495497"
+    },
+    {
+      "File": "candidates_part_054.txt",
+      "FirstRow": 174329,
+      "LastRow": 177609,
+      "Rows": 3281,
+      "Bytes": 100472659,
+      "SHA256": "07b14d0cc1b6ba6abfb62eb402d753579ab6d018c8a3bab4280a824d6a43057a"
+    },
+    {
+      "File": "candidates_part_055.txt",
+      "FirstRow": 177610,
+      "LastRow": 180891,
+      "Rows": 3282,
+      "Bytes": 100477495,
+      "SHA256": "9f9ca6092d0ef994e84b5a033772b572d17c73a73019d3a359caf77d0183434f"
+    },
+    {
+      "File": "candidates_part_056.txt",
+      "FirstRow": 180892,
+      "LastRow": 184174,
+      "Rows": 3283,
+      "Bytes": 100463893,
+      "SHA256": "ff1b526adcd02f07071739beb2adf87505c478dc4b5f82fa58a54dd8f711cad3"
+    },
+    {
+      "File": "candidates_part_057.txt",
+      "FirstRow": 184175,
+      "LastRow": 187454,
+      "Rows": 3280,
+      "Bytes": 100464361,
+      "SHA256": "45ce28f4809d6aaad2532157dea011a5b70c14992b3f82b407ceb2b5ffef3e87"
+    },
+    {
+      "File": "candidates_part_058.txt",
+      "FirstRow": 187455,
+      "LastRow": 190730,
+      "Rows": 3276,
+      "Bytes": 100446087,
+      "SHA256": "ebc74da4cbf420c22ebf68fe195aaeacfa4f7b8b5d667f18360c660db63edb6b"
+    },
+    {
+      "File": "candidates_part_059.txt",
+      "FirstRow": 190731,
+      "LastRow": 194005,
+      "Rows": 3275,
+      "Bytes": 100460720,
+      "SHA256": "e46d9578ef1c910747e125b05fbd8669a7bcf7a1be169e1b7cf81734eab89642"
+    },
+    {
+      "File": "candidates_part_060.txt",
+      "FirstRow": 194006,
+      "LastRow": 197280,
+      "Rows": 3275,
+      "Bytes": 100493513,
+      "SHA256": "9b368fe315d2ab22f49d2822064493acd5352ab926fbf9f1ac91bb7f1ce6812e"
+    },
+    {
+      "File": "candidates_part_061.txt",
+      "FirstRow": 197281,
+      "LastRow": 200558,
+      "Rows": 3278,
+      "Bytes": 100448516,
+      "SHA256": "7c7461e9801495e52bf28e6e4a97a8491c02432ee2bf49a60c2228f2f06f292b"
+    },
+    {
+      "File": "candidates_part_062.txt",
+      "FirstRow": 200559,
+      "LastRow": 203841,
+      "Rows": 3283,
+      "Bytes": 100453791,
+      "SHA256": "9fa1eea8fd893d85276624d460dd3bf18d1dbac9970c76b5a81bfb29e94606b5"
+    },
+    {
+      "File": "candidates_part_063.txt",
+      "FirstRow": 203842,
+      "LastRow": 207122,
+      "Rows": 3281,
+      "Bytes": 100478696,
+      "SHA256": "c405725adc5a98db8f7ca4c96d6a3b67740e937eefe65279853057523f58214b"
+    },
+    {
+      "File": "candidates_part_064.txt",
+      "FirstRow": 207123,
+      "LastRow": 210408,
+      "Rows": 3286,
+      "Bytes": 100472334,
+      "SHA256": "f3a0f8f068133cce26ed8e9e7e9e34a1faa5f6a00bba102beb9d6d32d1e66bdb"
+    },
+    {
+      "File": "candidates_part_065.txt",
+      "FirstRow": 210409,
+      "LastRow": 213685,
+      "Rows": 3277,
+      "Bytes": 100458371,
+      "SHA256": "0805ef03c6b22c0294fa3312a88fb3f900d15a3553eee65275a93f54770884b1"
+    },
+    {
+      "File": "candidates_part_066.txt",
+      "FirstRow": 213686,
+      "LastRow": 216957,
+      "Rows": 3272,
+      "Bytes": 100454236,
+      "SHA256": "a5ac9bc6ebf004acf9888ac6c10448ab0875f047d19a6be7ed57fa9d703d1649"
+    },
+    {
+      "File": "candidates_part_067.txt",
+      "FirstRow": 216958,
+      "LastRow": 220238,
+      "Rows": 3281,
+      "Bytes": 100464113,
+      "SHA256": "b0de83e313869c87fa71c1f6f10b3dd093f941a2a4427ed450e59a62341f7828"
+    },
+    {
+      "File": "candidates_part_068.txt",
+      "FirstRow": 220239,
+      "LastRow": 223523,
+      "Rows": 3285,
+      "Bytes": 100469754,
+      "SHA256": "e896527e291d77a03835c8eeed0a3e3af8a171a0cb2ccd7cd49f9be27911054f"
+    },
+    {
+      "File": "candidates_part_069.txt",
+      "FirstRow": 223524,
+      "LastRow": 226805,
+      "Rows": 3282,
+      "Bytes": 100462780,
+      "SHA256": "728bec213a80dbe30df73ba0a9b46d498578d780646910407aa7e76396bb0140"
+    },
+    {
+      "File": "candidates_part_070.txt",
+      "FirstRow": 226806,
+      "LastRow": 230094,
+      "Rows": 3289,
+      "Bytes": 100474459,
+      "SHA256": "7c772897d81d0c277fa378003ab4d222ceb55f56213a1f36e3f0491700bb2a9e"
+    },
+    {
+      "File": "candidates_part_071.txt",
+      "FirstRow": 230095,
+      "LastRow": 233381,
+      "Rows": 3287,
+      "Bytes": 100455347,
+      "SHA256": "9d8f1dec0244dbcb561d207508584bd1fd3d61ae02f642d2dae8f787591fb58c"
+    },
+    {
+      "File": "candidates_part_072.txt",
+      "FirstRow": 233382,
+      "LastRow": 236668,
+      "Rows": 3287,
+      "Bytes": 100478432,
+      "SHA256": "940378d3a4fb669733a754d37cc0187d104e8f4c9b49b83a7a600ee0a64e810b"
+    },
+    {
+      "File": "candidates_part_073.txt",
+      "FirstRow": 236669,
+      "LastRow": 239952,
+      "Rows": 3284,
+      "Bytes": 100451920,
+      "SHA256": "b14a10577f74c33801e2020b7809a7d6755c79300805451a9c8825ce303fc4f7"
+    },
+    {
+      "File": "candidates_part_074.txt",
+      "FirstRow": 239953,
+      "LastRow": 243236,
+      "Rows": 3284,
+      "Bytes": 100472369,
+      "SHA256": "c8b9ff0f80945b785c227476ec6841d52bb6714e1a36ab6745ec08429956bd2b"
+    },
+    {
+      "File": "candidates_part_075.txt",
+      "FirstRow": 243237,
+      "LastRow": 246521,
+      "Rows": 3285,
+      "Bytes": 100469022,
+      "SHA256": "7cea019bd599f421d66c1e918c4a5acd03d39b445a37f8679e911c84f940e4ab"
+    },
+    {
+      "File": "candidates_part_076.txt",
+      "FirstRow": 246522,
+      "LastRow": 249801,
+      "Rows": 3280,
+      "Bytes": 100463236,
+      "SHA256": "f6b40509547586266a9da08b85095a18fe6eeb64b5ab135dfee96feb02622a2b"
+    },
+    {
+      "File": "candidates_part_077.txt",
+      "FirstRow": 249802,
+      "LastRow": 253082,
+      "Rows": 3281,
+      "Bytes": 100470261,
+      "SHA256": "63cc13ea9b13fb3963fc02913f7643486caa657db656a48933c3f8a6f3aaa079"
+    },
+    {
+      "File": "candidates_part_078.txt",
+      "FirstRow": 253083,
+      "LastRow": 256375,
+      "Rows": 3293,
+      "Bytes": 100471253,
+      "SHA256": "72e8528ec3e5ef421c4726f4004bcde85e0ca38ea6b29a9685eb01cec5108bd1"
+    },
+    {
+      "File": "candidates_part_079.txt",
+      "FirstRow": 256376,
+      "LastRow": 259664,
+      "Rows": 3289,
+      "Bytes": 100447591,
+      "SHA256": "8816fde00d3c3df4f5e366a607ed238d0b0ee4851ff35541320ec7ba7a80fd93"
+    },
+    {
+      "File": "candidates_part_080.txt",
+      "FirstRow": 259665,
+      "LastRow": 262953,
+      "Rows": 3289,
+      "Bytes": 100483404,
+      "SHA256": "5812afe0c3d61e2d97b91ec476ed2bf1ee799a8e44f10f1b4ac403e1bf5ee778"
+    },
+    {
+      "File": "candidates_part_081.txt",
+      "FirstRow": 262954,
+      "LastRow": 266232,
+      "Rows": 3279,
+      "Bytes": 100447127,
+      "SHA256": "fe34d59f07fd01965317281d525ba5a28701289e9a8fb63d09980fc4347ea803"
+    },
+    {
+      "File": "candidates_part_082.txt",
+      "FirstRow": 266233,
+      "LastRow": 269519,
+      "Rows": 3287,
+      "Bytes": 100486252,
+      "SHA256": "6b656f7cfe1d730382d45133e9d1e571ab430eba72e058bccc4b7fd01c8d7d15"
+    },
+    {
+      "File": "candidates_part_083.txt",
+      "FirstRow": 269520,
+      "LastRow": 272815,
+      "Rows": 3296,
+      "Bytes": 100467975,
+      "SHA256": "83445fceebc4f5879c5293e223881bad821c1be88fa72e9e9d1a40dd46181b37"
+    },
+    {
+      "File": "candidates_part_084.txt",
+      "FirstRow": 272816,
+      "LastRow": 276107,
+      "Rows": 3292,
+      "Bytes": 100468275,
+      "SHA256": "673e7b779136e85b5c096407197c3ba0da00ed32eb501810d8f7412e525e5f28"
+    },
+    {
+      "File": "candidates_part_085.txt",
+      "FirstRow": 276108,
+      "LastRow": 279417,
+      "Rows": 3310,
+      "Bytes": 100444446,
+      "SHA256": "d216aa1493739e85400f81561cc0c0194d94d3bab6354a365a9da0afa9bd6d1f"
+    },
+    {
+      "File": "candidates_part_086.txt",
+      "FirstRow": 279418,
+      "LastRow": 282718,
+      "Rows": 3301,
+      "Bytes": 100476528,
+      "SHA256": "0261dca9c04cd318cbe4cba4218bc87181b7a6cad0c37731c79b4383ee3bf66f"
+    },
+    {
+      "File": "candidates_part_087.txt",
+      "FirstRow": 282719,
+      "LastRow": 286021,
+      "Rows": 3303,
+      "Bytes": 100471175,
+      "SHA256": "451c217674a9c80fffda002c44c771deb3e95f380498a9d9afe3a1f46a7936d9"
+    },
+    {
+      "File": "candidates_part_088.txt",
+      "FirstRow": 286022,
+      "LastRow": 289319,
+      "Rows": 3298,
+      "Bytes": 100449535,
+      "SHA256": "c362dbc3aed0e42c205d7cf6772200a9e2d0bd8cbdcb691edcd1b57eabf125e9"
+    },
+    {
+      "File": "candidates_part_089.txt",
+      "FirstRow": 289320,
+      "LastRow": 292614,
+      "Rows": 3295,
+      "Bytes": 100472393,
+      "SHA256": "efa6e3eea1269e99143a1d37dab70982350f662240528e8dba45f061b6d43f99"
+    },
+    {
+      "File": "candidates_part_090.txt",
+      "FirstRow": 292615,
+      "LastRow": 295897,
+      "Rows": 3283,
+      "Bytes": 100454050,
+      "SHA256": "c3b79039575791bf6b71fe4672ca79d898932cbb0444ced28c3a0778b8852043"
+    },
+    {
+      "File": "candidates_part_091.txt",
+      "FirstRow": 295898,
+      "LastRow": 299196,
+      "Rows": 3299,
+      "Bytes": 100473432,
+      "SHA256": "32bc0c815fb5ec67c81be87ed599e788772ae113ad1beaa8235931a3dc73ad31"
+    },
+    {
+      "File": "candidates_part_092.txt",
+      "FirstRow": 299197,
+      "LastRow": 302494,
+      "Rows": 3298,
+      "Bytes": 100455827,
+      "SHA256": "10eefd7c89887c563de3a2688465e768d830467ce33cc29f426865c3e0e6778d"
+    },
+    {
+      "File": "candidates_part_093.txt",
+      "FirstRow": 302495,
+      "LastRow": 305787,
+      "Rows": 3293,
+      "Bytes": 100476558,
+      "SHA256": "57b0a7e817181002d48307518e6cc9cdec554208a306248c1eaedcbe742d66e6"
+    },
+    {
+      "File": "candidates_part_094.txt",
+      "FirstRow": 305788,
+      "LastRow": 309083,
+      "Rows": 3296,
+      "Bytes": 100474779,
+      "SHA256": "5d957af5ac58b0e6bcd1bcb3701c5cea35d9c194b41b2869fea62f15a4da87b0"
+    },
+    {
+      "File": "candidates_part_095.txt",
+      "FirstRow": 309084,
+      "LastRow": 312376,
+      "Rows": 3293,
+      "Bytes": 100442460,
+      "SHA256": "54a17a8193907990373d8e76e3c117e6545f3fe758a6f4ff67a9a48a334a55ba"
+    },
+    {
+      "File": "candidates_part_096.txt",
+      "FirstRow": 312377,
+      "LastRow": 315670,
+      "Rows": 3294,
+      "Bytes": 100487693,
+      "SHA256": "e8c4fad975434bc352b6825823302d3887cbbfb36cac652b4c0aabcce41ab6b9"
+    },
+    {
+      "File": "candidates_part_097.txt",
+      "FirstRow": 315671,
+      "LastRow": 318962,
+      "Rows": 3292,
+      "Bytes": 100469422,
+      "SHA256": "fcde32720c86d2e979e38461fe684d2aa7472d76abd9947e042bbc5f7e0b6dea"
+    },
+    {
+      "File": "candidates_part_098.txt",
+      "FirstRow": 318963,
+      "LastRow": 322256,
+      "Rows": 3294,
+      "Bytes": 100439204,
+      "SHA256": "b296b85601ce45640979710a505ec4650fec20983d9ccbcd199bfaaad69dd71e"
+    },
+    {
+      "File": "candidates_part_099.txt",
+      "FirstRow": 322257,
+      "LastRow": 325549,
+      "Rows": 3293,
+      "Bytes": 100493881,
+      "SHA256": "146634b467833264a5387f92c62f3abb953f784ebf0ef1b69809050abe435bb6"
+    },
+    {
+      "File": "candidates_part_100.txt",
+      "FirstRow": 325550,
+      "LastRow": 328841,
+      "Rows": 3292,
+      "Bytes": 100436075,
+      "SHA256": "d3b48afc1b951be81f757f5c753fc51d2e282c556a92097be53ad7f947b2ca5b"
+    }
+  ],
+  "ReconstructionVerified": true
+}

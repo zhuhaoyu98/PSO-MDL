@@ -1,0 +1,6 @@
+function assert_output_available(filePath, overwrite)
+%ASSERT_OUTPUT_AVAILABLE Prevent unintended replacement of a completed stage.
+assert(~isfile(filePath) || overwrite, 'mdl:OutputExists', ...
+    ['Output already exists: %s. Use a new Output.Directory or explicitly ' ...
+     'set cfg.Output.Overwrite=true.'], filePath);
+end

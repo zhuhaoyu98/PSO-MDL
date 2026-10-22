@@ -11,12 +11,6 @@ Default input paths are relative to this project, not to a particular computer:
 | reference_descriptors.txt | 16 reference records × the same 3,855 descriptors |
 | reference_manifest.tsv | Reference identities in exactly the descriptor-record order |
 
-These are the only retained study input groups. There are no historical models,
-background matrices, cached missingness results or simulated inputs to load
-before Step 00. The `.gitignore` allowlist covers these exact paths, not arbitrary
-files placed under `data/private/`. The MIT code license does not license
-third-party derived data; confirm applicable redistribution rights separately.
-
 Descriptor files are UTF-8, tab-delimited, with `No.`, `NAME`, then descriptor
 columns. Candidate and reference descriptor names and order must match exactly.
 Missing values are not zero. Identity manifests use `INCHIKEY`; candidate
@@ -67,14 +61,3 @@ Intermediate files are generated locally, not required as initial inputs.
 To repeat the workflow without overwriting an existing run, select a new
 `cfg.Output.Directory` in `functions/pso_mdl_config.m`. A relocated project
 uses its own local inputs and outputs; no original workstation path is required.
-
-## Publication size
-
-The original library was Specs SC 10 mg, August 2025. The retained input
-payload is approximately 10.1 GB. Individual files are below 100 MiB, but the
-large parts and candidate manifest cannot be uploaded through GitHub's
-25 MiB-per-file browser uploader. GitHub also limits a single push to 2 GB;
-splitting a table does not remove push/repository constraints. Plan data
-distribution before publishing; the project has not been uploaded automatically.
-See [large-file guidance](https://docs.github.com/en/repositories/working-with-files/managing-large-files/about-large-files-on-github)
-and [repository limits](https://docs.github.com/en/repositories/creating-and-managing-repositories/repository-limits).

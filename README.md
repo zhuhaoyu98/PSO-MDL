@@ -6,8 +6,7 @@
 
 PSO-MDL selects molecular-descriptor subspaces by particle swarm optimization
 and ranks candidates by their equal-weight mean rank across independent models.
-The study concerns PBP2-related antibacterial screening. A rank is a relative
-descriptor-space priority, not a prediction of antibacterial activity or binding.
+The study concerns PBP2-related antibacterial screening.
 
 ## Requirements
 
@@ -41,8 +40,7 @@ step04_generate_figures
 | 04 | This run's Step 02/03 outputs | Figure 3A–C and Figure 4A–E, each as PNG and PDF |
 
 All generated files go to `results/research/`, relative to the project root.
-Each Step reads existing upstream outputs; none silently loads historical
-models or substitutes simulated inputs. Step 04 plots the current run.
+Each Step reads existing upstream outputs. Step 04 plots the current run.
 For a separate repeat run, change only `cfg.Output.Directory` in
 `functions/pso_mdl_config.m` to a new directory. Existing outputs are protected
 by default. Other input paths and research parameters are configured in that
@@ -52,8 +50,8 @@ The formal settings remain 16 references, 20,000 background molecules,
 306,922 screening candidates, 2,781 retained descriptors, and 64 seeds × 3,000
 PSO generations. P is the mean non-medoid proximity percentile (0–100), with
 J = −RFP. Internally, PSO compares the unscaled key
-K = −RF sum(p_t) and exports J = K/(nRef−1), preserving the historical
-floating-point comparison path without changing the mathematical objective.
+K = −RF sum(p_t) and exports J = K/(nRef−1), without changing the
+mathematical objective.
 
 All 64 models and the complete candidate ranking were reproduced exactly
 from scratch on NIRO using MATLAB R2024a, Intel MKL 2023.2 (AVX2), and 28
@@ -74,27 +72,12 @@ data/private/
   reference_manifest.tsv
 ```
 
-Keep every numbered part and its JSON manifest unchanged. The code streams
-the parts as one table; no merged TXT or external data directory is needed.
-The folder name `private` is retained for compatibility; these exact input
-paths are now allowlisted in `.gitignore`. Other data and generated outputs
-remain ignored. No saved models, previous rankings, test inputs, or historical
-paper-result bundle are included.
-
 Licensed Dragon 7 calculated all 2D descriptors, with 3D disabled and default
 save-all export; no descriptor exclusion/filtering was applied in Dragon.
 Both reference and candidate tables contain 3,855 descriptors. Subsequent
 MATLAB quality control removes 18 descriptors exceeding 5% candidate
 missingness and 1,056 with near-zero/invalid scales, leaving 2,781.
 See [data/README.md](data/README.md) for input and output details.
-
-The input payload is approximately 10.1 GB; its files are below 100 MiB but
-exceed the browser-upload limit. Splitting does not remove GitHub's push-size
-or repository-size constraints. Use an appropriate Git-based data distribution
-plan and confirm redistribution permission before publishing third-party
-derived data. See [GitHub's large-file guidance](https://docs.github.com/en/repositories/working-with-files/managing-large-files/about-large-files-on-github)
-and [repository limits](https://docs.github.com/en/repositories/creating-and-managing-repositories/repository-limits).
-The local release has not been uploaded automatically.
 
 ## Citation and License
 

@@ -77,6 +77,40 @@ MATLAB quality control removes 18 descriptors exceeding 5% candidate
 missingness and 1,056 with near-zero/invalid scales, leaving 2,781.
 See [data/README.md](data/README.md) for input and output details.
 
+## Helper functions
+
+The table lists every MATLAB helper file under `functions/`.
+
+| File (relative to `functions/`) | Purpose |
+|---|---|
+| [pso_mdl_config.m](functions/pso_mdl_config.m) | Define input/output paths, preprocessing settings, PSO parameters and figure options. |
+| [resolve_pso_mdl_config.m](functions/resolve_pso_mdl_config.m) | Resolve configuration and project-relative paths, initialize helper folders and check runtime dependencies. |
+| [io/assert_output_available.m](functions/io/assert_output_available.m) | Prevent unintended overwriting of existing outputs unless explicitly enabled. |
+| [io/audit_descriptor_missingness.m](functions/io/audit_descriptor_missingness.m) | Count descriptor-wise NaN and Inf values while checking streamed table alignment. |
+| [io/compute_file_sha256.m](functions/io/compute_file_sha256.m) | Calculate a file's SHA-256 digest in memory-efficient blocks. |
+| [io/count_text_data_rows.m](functions/io/count_text_data_rows.m) | Count nonempty data rows after the header of a text table. |
+| [io/descriptor_table_stream.m](functions/io/descriptor_table_stream.m) | Stream a single TXT table or ordered descriptor parts, validating their structure. |
+| [io/load_paper_results.m](functions/io/load_paper_results.m) | Validate and load a supplied saved-result bundle; this optional bundle is not included. |
+| [io/match_input_files.m](functions/io/match_input_files.m) | Match configured file patterns, including empty optional input paths. |
+| [io/pso_mdl_paths.m](functions/io/pso_mdl_paths.m) | Create run-specific results, cache, audit, figure and status directories. |
+| [io/read_descriptor_columns.m](functions/io/read_descriptor_columns.m) | Read requested descriptor columns for all molecules, preserving column order. |
+| [io/read_descriptor_header.m](functions/io/read_descriptor_header.m) | Validate table headers and return ordered identifier and descriptor names. |
+| [io/read_descriptor_rows.m](functions/io/read_descriptor_rows.m) | Read requested molecule rows with all raw descriptors, preserving row order. |
+| [io/resolve_input_file.m](functions/io/resolve_input_file.m) | Resolve a required or optional input file and reject ambiguous matches. |
+| [io/write_json.m](functions/io/write_json.m) | Write structured metadata as indented UTF-8 JSON. |
+| [preprocessing/deduplicate_candidate_manifest.m](functions/preprocessing/deduplicate_candidate_manifest.m) | Apply identity-based deduplication and reference-overlap rules, recording exclusion reasons. |
+| [preprocessing/select_background_partition.m](functions/preprocessing/select_background_partition.m) | Select background molecules and separate screening/excluded records with reproducible membership. |
+| [preprocessing/weighted_descriptor_indices.m](functions/preprocessing/weighted_descriptor_indices.m) | Identify descriptors on the name-based emphasis list for Step 01 scaling. |
+| [scoring/build_fitness_context.m](functions/scoring/build_fitness_context.m) | Fix the reference medoid and cache per-descriptor squared distance components. |
+| [scoring/column_percentile.m](functions/scoring/column_percentile.m) | Calculate a linearly interpolated percentile for each column of a numeric matrix. |
+| [scoring/evaluate_pso_mdl_fitness.m](functions/scoring/evaluate_pso_mdl_fitness.m) | Evaluate J = -RFP and return objective components and the PSO comparison key. |
+| [optimization/configure_numerical_execution.m](functions/optimization/configure_numerical_execution.m) | Set the computational thread limit and record MATLAB/BLAS environment details. |
+| [optimization/run_sign_pso.m](functions/optimization/run_sign_pso.m) | Optimize a descriptor mask using seeded, sign-encoded PSO and record optimization histories. |
+| [ranking/aggregate_candidate_ranks.m](functions/ranking/aggregate_candidate_ranks.m) | Combine equal-weight model ranks and summarize cross-model rank uncertainty. |
+| [ranking/score_candidates_streaming.m](functions/ranking/score_candidates_streaming.m) | Stream descriptors, apply frozen preprocessing and compute per-model distances to the medoid. |
+| [visualization/export_publication_figure.m](functions/visualization/export_publication_figure.m) | Export figures as resolution-controlled PNG and vector PDF files. |
+| [visualization/plot_saved_paper_figures.m](functions/visualization/plot_saved_paper_figures.m) | Redraw Figures 3-4 from a supplied saved-result bundle without rerunning PSO. |
+
 ## Citation and License
 
 Please cite Zhu Haoyu, **PSO-MDL, version 1.0.0**, using

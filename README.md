@@ -1,7 +1,5 @@
 # PSO-MDL
 
-[中文说明](README_zh.md)
-
 ## Overview
 
 PSO-MDL selects molecular-descriptor subspaces by particle swarm optimization

@@ -38,8 +38,7 @@ step04_generate_figures
 | 04 | This run's Step 02/03 outputs | Figure 3A–C and Figure 4A–E, each as PNG and PDF |
 
 All generated files go to `results/research/`, relative to the project root.
-Each Step reads existing upstream outputs. Steps 02 and 03 save results and
-plot-source tables; Step 04 generates all publication figures from this run.
+Each Step reads existing upstream outputs. Step 04 plots the current run.
 For a separate repeat run, change only `cfg.Output.Directory` in
 `functions/pso_mdl_config.m` to a new directory. Existing outputs are protected
 by default. Other input paths and research parameters are configured in that
@@ -91,6 +90,7 @@ The table lists every MATLAB helper file under `functions/`.
 | [io/compute_file_sha256.m](functions/io/compute_file_sha256.m) | Calculate a file's SHA-256 digest in memory-efficient blocks. |
 | [io/count_text_data_rows.m](functions/io/count_text_data_rows.m) | Count nonempty data rows after the header of a text table. |
 | [io/descriptor_table_stream.m](functions/io/descriptor_table_stream.m) | Stream a single TXT table or ordered descriptor parts, validating their structure. |
+| [io/load_paper_results.m](functions/io/load_paper_results.m) | Validate and load a supplied saved-result bundle; this optional bundle is not included. |
 | [io/match_input_files.m](functions/io/match_input_files.m) | Match configured file patterns, including empty optional input paths. |
 | [io/pso_mdl_paths.m](functions/io/pso_mdl_paths.m) | Create run-specific results, cache, audit, figure and status directories. |
 | [io/read_descriptor_columns.m](functions/io/read_descriptor_columns.m) | Read requested descriptor columns for all molecules, preserving column order. |
@@ -109,6 +109,7 @@ The table lists every MATLAB helper file under `functions/`.
 | [ranking/aggregate_candidate_ranks.m](functions/ranking/aggregate_candidate_ranks.m) | Combine equal-weight model ranks and summarize cross-model rank uncertainty. |
 | [ranking/score_candidates_streaming.m](functions/ranking/score_candidates_streaming.m) | Stream descriptors, apply frozen preprocessing and compute per-model distances to the medoid. |
 | [visualization/export_publication_figure.m](functions/visualization/export_publication_figure.m) | Export figures as resolution-controlled PNG and vector PDF files. |
+| [visualization/plot_saved_paper_figures.m](functions/visualization/plot_saved_paper_figures.m) | Redraw Figures 3-4 from a supplied saved-result bundle without rerunning PSO. |
 
 ## Citation and License
 

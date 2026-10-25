@@ -2,7 +2,7 @@ function cfg = pso_mdl_config(profile)
 %PSO_MDL_CONFIG Define portable inputs and the validated research parameters.
 %   CFG = PSO_MDL_CONFIG("formal") preserves the research search settings.
 %   Edit the input/output paths below before running Steps 00-03.
-%   Commercial descriptors and molecular records are not bundled.
+%   The four original input groups are provided under data/private/.
 if nargin < 1, profile = "formal"; end
 profile = lower(string(profile));
 assert(isscalar(profile) && profile == "formal", ...
@@ -68,9 +68,6 @@ cfg.PSO.StallWindow = 200;
 cfg.PSO.StallRelativeTolerance = 1e-4;
 cfg.PSO.DistanceEpsilon = 1e-12;
 
-cfg.Stability.BackgroundTopK = [100 500 1000 5000 10000].';
-cfg.Stability.RandomHalfRepeats = 100;
-cfg.Stability.RandomSeed = 20260724;
 cfg.Ranking.ExpectedReferenceIndex = [];
 cfg.Ranking.StabilityTopK = 1000;
 cfg.Ranking.StabilityCurveTopK = [20 50 100 200 500 1000 2000 5000 10000];
@@ -79,7 +76,6 @@ cfg.Figures.Show = false;
 cfg.Figures.Overwrite = false;
 cfg.Figures.Dpi = 600;
 cfg.Figures.FontName = 'Arial';
-cfg.Figures.OptimizationFontSize = 9;
 cfg.Figures.PublicationFontSize = 8.5;
 cfg.Figures.FitnessDisplayScale = 1e6;
 cfg.Figures.RegularSizeCm = [8.4 6.6];

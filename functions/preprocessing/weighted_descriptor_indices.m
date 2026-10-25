@@ -1,458 +1,68 @@
-function [id0] = weighted_descriptor_indices(hdr)
-%WEIGHTED_DESCRIPTOR_INDICES Return indices matching the validated emphasis list.
-%   HDR is a cell array of unique descriptor names. Exact, case-sensitive
-%   matching preserves the original rule order and naturally ignores absent names.
-%   This function returns indices only; Step 01 applies WeightFactor to scales.
-
-id0=[];
-
-idx = find(strcmp(hdr,'MW')); id0=[id0,idx];
-idx = find(strcmp(hdr,'AMW')); id0=[id0,idx];
-idx = find(strcmp(hdr,'Sv')); id0=[id0,idx];
-idx = find(strcmp(hdr,'Se')); id0=[id0,idx];
-idx = find(strcmp(hdr,'Sp')); id0=[id0,idx];
-idx = find(strcmp(hdr,'Si')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nAT')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nSK')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nTA')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nBT')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nBO')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nBM')); id0=[id0,idx];
-idx = find(strcmp(hdr,'SCBO')); id0=[id0,idx];
-idx = find(strcmp(hdr,'RBN')); id0=[id0,idx];
-idx = find(strcmp(hdr,'RBF')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nDB')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nTB')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nAB')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nC')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nN')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nO')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nP')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nS')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nF')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nCL')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nBR')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nI')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nB')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nHM')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nHet')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nX')); id0=[id0,idx];
-idx = find(strcmp(hdr,'H%')); id0=[id0,idx];
-idx = find(strcmp(hdr,'C%')); id0=[id0,idx];
-idx = find(strcmp(hdr,'N%')); id0=[id0,idx];
-idx = find(strcmp(hdr,'O%')); id0=[id0,idx];
-idx = find(strcmp(hdr,'X%')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nCsp3')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nCsp2')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nCsp')); id0=[id0,idx];
-idx = find(strcmp(hdr,'totalcharge')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nCIC')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nCIR')); id0=[id0,idx];
-idx = find(strcmp(hdr,'TRS')); id0=[id0,idx];
-idx = find(strcmp(hdr,'Rperim')); id0=[id0,idx];
-idx = find(strcmp(hdr,'Rbrid')); id0=[id0,idx];
-idx = find(strcmp(hdr,'MCD')); id0=[id0,idx];
-idx = find(strcmp(hdr,'RFD')); id0=[id0,idx];
-idx = find(strcmp(hdr,'NRS')); id0=[id0,idx];
-idx = find(strcmp(hdr,'NNRS')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nR03')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nR04')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nR05')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nR06')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nR07')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nR08')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nR09')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nR10')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nR11')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nR12')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nBnz')); id0=[id0,idx];
-idx = find(strcmp(hdr,'ARR')); id0=[id0,idx];
-idx = find(strcmp(hdr,'P_VSA_ppp_L')); id0=[id0,idx];
-idx = find(strcmp(hdr,'P_VSA_ppp_P')); id0=[id0,idx];
-idx = find(strcmp(hdr,'P_VSA_ppp_N')); id0=[id0,idx];
-idx = find(strcmp(hdr,'P_VSA_ppp_D')); id0=[id0,idx];
-idx = find(strcmp(hdr,'P_VSA_ppp_A')); id0=[id0,idx];
-idx = find(strcmp(hdr,'P_VSA_ppp_ar')); id0=[id0,idx];
-idx = find(strcmp(hdr,'P_VSA_ppp_con')); id0=[id0,idx];
-idx = find(strcmp(hdr,'P_VSA_ppp_hal')); id0=[id0,idx];
-idx = find(strcmp(hdr,'P_VSA_ppp_cyc')); id0=[id0,idx];
-idx = find(strcmp(hdr,'P_VSA_ppp_ter')); id0=[id0,idx];
-idx = find(strcmp(hdr,'G1')); id0=[id0,idx];
-idx = find(strcmp(hdr,'G2')); id0=[id0,idx];
-idx = find(strcmp(hdr,'RGyr')); id0=[id0,idx];
-idx = find(strcmp(hdr,'SPAN')); id0=[id0,idx];
-idx = find(strcmp(hdr,'SPAM')); id0=[id0,idx];
-idx = find(strcmp(hdr,'MEcc')); id0=[id0,idx];
-idx = find(strcmp(hdr,'SPH')); id0=[id0,idx];
-idx = find(strcmp(hdr,'ASP')); id0=[id0,idx];
-idx = find(strcmp(hdr,'PJI3')); id0=[id0,idx];
-idx = find(strcmp(hdr,'L/Bw')); id0=[id0,idx];
-idx = find(strcmp(hdr,'HOMA')); id0=[id0,idx];
-idx = find(strcmp(hdr,'CMBL')); id0=[id0,idx];
-idx = find(strcmp(hdr,'AROM')); id0=[id0,idx];
-idx = find(strcmp(hdr,'HOMT')); id0=[id0,idx];
-idx = find(strcmp(hdr,'Tu')); id0=[id0,idx];
-idx = find(strcmp(hdr,'Tm')); id0=[id0,idx];
-idx = find(strcmp(hdr,'Tv')); id0=[id0,idx];
-idx = find(strcmp(hdr,'Te')); id0=[id0,idx];
-idx = find(strcmp(hdr,'Tp')); id0=[id0,idx];
-idx = find(strcmp(hdr,'Ti')); id0=[id0,idx];
-idx = find(strcmp(hdr,'Ts')); id0=[id0,idx];
-idx = find(strcmp(hdr,'Au')); id0=[id0,idx];
-idx = find(strcmp(hdr,'Am')); id0=[id0,idx];
-idx = find(strcmp(hdr,'Av')); id0=[id0,idx];
-idx = find(strcmp(hdr,'Ae')); id0=[id0,idx];
-idx = find(strcmp(hdr,'Ap')); id0=[id0,idx];
-idx = find(strcmp(hdr,'Ai')); id0=[id0,idx];
-idx = find(strcmp(hdr,'As')); id0=[id0,idx];
-idx = find(strcmp(hdr,'Gu')); id0=[id0,idx];
-idx = find(strcmp(hdr,'Gm')); id0=[id0,idx];
-idx = find(strcmp(hdr,'Ku')); id0=[id0,idx];
-idx = find(strcmp(hdr,'Km')); id0=[id0,idx];
-idx = find(strcmp(hdr,'Kv')); id0=[id0,idx];
-idx = find(strcmp(hdr,'Ke')); id0=[id0,idx];
-idx = find(strcmp(hdr,'Kp')); id0=[id0,idx];
-idx = find(strcmp(hdr,'Ki')); id0=[id0,idx];
-idx = find(strcmp(hdr,'Ks')); id0=[id0,idx];
-idx = find(strcmp(hdr,'Du')); id0=[id0,idx];
-idx = find(strcmp(hdr,'Dm')); id0=[id0,idx];
-idx = find(strcmp(hdr,'Dv')); id0=[id0,idx];
-idx = find(strcmp(hdr,'De')); id0=[id0,idx];
-idx = find(strcmp(hdr,'Dp')); id0=[id0,idx];
-idx = find(strcmp(hdr,'Di')); id0=[id0,idx];
-idx = find(strcmp(hdr,'Ds')); id0=[id0,idx];
-idx = find(strcmp(hdr,'Vu')); id0=[id0,idx];
-idx = find(strcmp(hdr,'Vm')); id0=[id0,idx];
-idx = find(strcmp(hdr,'Vv')); id0=[id0,idx];
-idx = find(strcmp(hdr,'Ve')); id0=[id0,idx];
-idx = find(strcmp(hdr,'Vp')); id0=[id0,idx];
-idx = find(strcmp(hdr,'Vi')); id0=[id0,idx];
-idx = find(strcmp(hdr,'Vs')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nCp')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nCs')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nCt')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nCq')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nCrs')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nCrt')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nCrq')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nCar')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nCbH')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nCb-')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nCconj')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nR=Cp')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nR=Cs')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nR=Ct')); id0=[id0,idx];
-idx = find(strcmp(hdr,'n=C=')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nR#CH/X')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nR#C-')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nROCN')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nArOCN')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nRNCO')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nArNCO')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nRSCN')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nArSCN')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nRNCS')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nArNCS')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nRCOOH')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nArCOOH')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nRCOOR')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nArCOOR')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nRCONH2')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nArCONH2')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nRCONHR')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nArCONHR')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nRCONR2')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nArCONR2')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nROCON')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nArOCON')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nRCOX')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nArCOX')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nRCSOH')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nArCSOH')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nRCSSH')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nArCSSH')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nRCOSR')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nArCOSR')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nRCSSR')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nArCSSR')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nRCHO')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nArCHO')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nRCO')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nArCO')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nCONN')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nC=O(O)2')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nN=C-N<')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nC(=N)N2')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nRC=N')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nArC=N')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nRCNO')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nArCNO')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nRNH2')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nArNH2')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nRNHR')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nArNHR')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nRNR2')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nArNR2')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nN-N')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nN=N')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nRCN')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nArCN')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nN+')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nNq')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nRNHO')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nArNHO')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nRNNOx')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nArNNOx')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nRNO')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nArNO')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nRNO2')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nArNO2')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nN(CO)2')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nC=N-N<')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nROH')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nArOH')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nOHp')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nOHs')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nOHt')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nROR')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nArOR')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nROX')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nArOX')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nO(C=O)2')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nH2O')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nSH')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nC=S')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nRSR')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nRSSR')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nSO')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nS(=O)2')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nSOH')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nSOOH')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nSO2OH')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nSO3OH')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nSO2')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nSO3')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nSO4')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nSO2N')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nPO3')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nPO4')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nPR3')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nP(=O)O2R')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nP(=O)R3/nPR5')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nCH2RX')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nCHR2X')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nCR3X')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nR=CHX')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nR=CRX')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nR#CX')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nCHRX2')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nCR2X2')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nR=CX2')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nCRX3')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nArX')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nCXr')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nCXr=')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nCconjX')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nAziridines')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nOxiranes')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nThiranes')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nAzetidines')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nOxetanes')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nThioethanes')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nBeta-Lactams')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nPyrrolidines')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nOxolanes')); id0=[id0,idx];
-idx = find(strcmp(hdr,'ntH-Thiophenes')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nPyrroles')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nPyrazoles')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nImidazoles')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nFuranes')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nThiophenes')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nOxazoles')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nIsoxazoles')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nThiazoles')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nIsothiazoles')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nTriazoles')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nPyridines')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nPyridazines')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nPyrimidines')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nPyrazines')); id0=[id0,idx];
-idx = find(strcmp(hdr,'n135-Triazines')); id0=[id0,idx];
-idx = find(strcmp(hdr,'n124-Triazines')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nHDon')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nHAcc')); id0=[id0,idx];
-idx = find(strcmp(hdr,'nHBonds')); id0=[id0,idx];
-idx = find(strcmp(hdr,'C-001')); id0=[id0,idx];
-idx = find(strcmp(hdr,'C-002')); id0=[id0,idx];
-idx = find(strcmp(hdr,'C-003')); id0=[id0,idx];
-idx = find(strcmp(hdr,'C-004')); id0=[id0,idx];
-idx = find(strcmp(hdr,'C-005')); id0=[id0,idx];
-idx = find(strcmp(hdr,'C-006')); id0=[id0,idx];
-idx = find(strcmp(hdr,'C-007')); id0=[id0,idx];
-idx = find(strcmp(hdr,'C-008')); id0=[id0,idx];
-idx = find(strcmp(hdr,'C-009')); id0=[id0,idx];
-idx = find(strcmp(hdr,'C-010')); id0=[id0,idx];
-idx = find(strcmp(hdr,'C-011')); id0=[id0,idx];
-idx = find(strcmp(hdr,'C-012')); id0=[id0,idx];
-idx = find(strcmp(hdr,'C-013')); id0=[id0,idx];
-idx = find(strcmp(hdr,'C-014')); id0=[id0,idx];
-idx = find(strcmp(hdr,'C-015')); id0=[id0,idx];
-idx = find(strcmp(hdr,'C-016')); id0=[id0,idx];
-idx = find(strcmp(hdr,'C-017')); id0=[id0,idx];
-idx = find(strcmp(hdr,'C-018')); id0=[id0,idx];
-idx = find(strcmp(hdr,'C-019')); id0=[id0,idx];
-idx = find(strcmp(hdr,'C-020')); id0=[id0,idx];
-idx = find(strcmp(hdr,'C-021')); id0=[id0,idx];
-idx = find(strcmp(hdr,'C-022')); id0=[id0,idx];
-idx = find(strcmp(hdr,'C-023')); id0=[id0,idx];
-idx = find(strcmp(hdr,'C-024')); id0=[id0,idx];
-idx = find(strcmp(hdr,'C-025')); id0=[id0,idx];
-idx = find(strcmp(hdr,'C-026')); id0=[id0,idx];
-idx = find(strcmp(hdr,'C-027')); id0=[id0,idx];
-idx = find(strcmp(hdr,'C-028')); id0=[id0,idx];
-idx = find(strcmp(hdr,'C-029')); id0=[id0,idx];
-idx = find(strcmp(hdr,'C-030')); id0=[id0,idx];
-idx = find(strcmp(hdr,'C-031')); id0=[id0,idx];
-idx = find(strcmp(hdr,'C-032')); id0=[id0,idx];
-idx = find(strcmp(hdr,'C-033')); id0=[id0,idx];
-idx = find(strcmp(hdr,'C-034')); id0=[id0,idx];
-idx = find(strcmp(hdr,'C-035')); id0=[id0,idx];
-idx = find(strcmp(hdr,'C-036')); id0=[id0,idx];
-idx = find(strcmp(hdr,'C-037')); id0=[id0,idx];
-idx = find(strcmp(hdr,'C-038')); id0=[id0,idx];
-idx = find(strcmp(hdr,'C-039')); id0=[id0,idx];
-idx = find(strcmp(hdr,'C-040')); id0=[id0,idx];
-idx = find(strcmp(hdr,'C-041')); id0=[id0,idx];
-idx = find(strcmp(hdr,'C-042')); id0=[id0,idx];
-idx = find(strcmp(hdr,'C-043')); id0=[id0,idx];
-idx = find(strcmp(hdr,'C-044')); id0=[id0,idx];
-idx = find(strcmp(hdr,'H-046')); id0=[id0,idx];
-idx = find(strcmp(hdr,'H-047')); id0=[id0,idx];
-idx = find(strcmp(hdr,'H-048')); id0=[id0,idx];
-idx = find(strcmp(hdr,'H-049')); id0=[id0,idx];
-idx = find(strcmp(hdr,'H-050')); id0=[id0,idx];
-idx = find(strcmp(hdr,'H-051')); id0=[id0,idx];
-idx = find(strcmp(hdr,'H-052')); id0=[id0,idx];
-idx = find(strcmp(hdr,'H-053')); id0=[id0,idx];
-idx = find(strcmp(hdr,'H-054')); id0=[id0,idx];
-idx = find(strcmp(hdr,'H-055')); id0=[id0,idx];
-idx = find(strcmp(hdr,'O-056')); id0=[id0,idx];
-idx = find(strcmp(hdr,'O-057')); id0=[id0,idx];
-idx = find(strcmp(hdr,'O-058')); id0=[id0,idx];
-idx = find(strcmp(hdr,'O-059')); id0=[id0,idx];
-idx = find(strcmp(hdr,'O-060')); id0=[id0,idx];
-idx = find(strcmp(hdr,'O-061')); id0=[id0,idx];
-idx = find(strcmp(hdr,'O-062')); id0=[id0,idx];
-idx = find(strcmp(hdr,'O-063')); id0=[id0,idx];
-idx = find(strcmp(hdr,'Se-064')); id0=[id0,idx];
-idx = find(strcmp(hdr,'Se-065')); id0=[id0,idx];
-idx = find(strcmp(hdr,'N-066')); id0=[id0,idx];
-idx = find(strcmp(hdr,'N-067')); id0=[id0,idx];
-idx = find(strcmp(hdr,'N-068')); id0=[id0,idx];
-idx = find(strcmp(hdr,'N-069')); id0=[id0,idx];
-idx = find(strcmp(hdr,'N-070')); id0=[id0,idx];
-idx = find(strcmp(hdr,'N-071')); id0=[id0,idx];
-idx = find(strcmp(hdr,'N-072')); id0=[id0,idx];
-idx = find(strcmp(hdr,'N-073')); id0=[id0,idx];
-idx = find(strcmp(hdr,'N-074')); id0=[id0,idx];
-idx = find(strcmp(hdr,'N-075')); id0=[id0,idx];
-idx = find(strcmp(hdr,'N-076')); id0=[id0,idx];
-idx = find(strcmp(hdr,'N-077')); id0=[id0,idx];
-idx = find(strcmp(hdr,'N-078')); id0=[id0,idx];
-idx = find(strcmp(hdr,'N-079')); id0=[id0,idx];
-idx = find(strcmp(hdr,'F-081')); id0=[id0,idx];
-idx = find(strcmp(hdr,'F-082')); id0=[id0,idx];
-idx = find(strcmp(hdr,'F-083')); id0=[id0,idx];
-idx = find(strcmp(hdr,'F-084')); id0=[id0,idx];
-idx = find(strcmp(hdr,'F-085')); id0=[id0,idx];
-idx = find(strcmp(hdr,'Cl-086')); id0=[id0,idx];
-idx = find(strcmp(hdr,'Cl-087')); id0=[id0,idx];
-idx = find(strcmp(hdr,'Cl-088')); id0=[id0,idx];
-idx = find(strcmp(hdr,'Cl-089')); id0=[id0,idx];
-idx = find(strcmp(hdr,'Cl-090')); id0=[id0,idx];
-idx = find(strcmp(hdr,'Br-091')); id0=[id0,idx];
-idx = find(strcmp(hdr,'Br-092')); id0=[id0,idx];
-idx = find(strcmp(hdr,'Br-093')); id0=[id0,idx];
-idx = find(strcmp(hdr,'Br-094')); id0=[id0,idx];
-idx = find(strcmp(hdr,'Br-095')); id0=[id0,idx];
-idx = find(strcmp(hdr,'I-096')); id0=[id0,idx];
-idx = find(strcmp(hdr,'I-097')); id0=[id0,idx];
-idx = find(strcmp(hdr,'I-098')); id0=[id0,idx];
-idx = find(strcmp(hdr,'I-099')); id0=[id0,idx];
-idx = find(strcmp(hdr,'I-100')); id0=[id0,idx];
-idx = find(strcmp(hdr,'F-101')); id0=[id0,idx];
-idx = find(strcmp(hdr,'Cl-102')); id0=[id0,idx];
-idx = find(strcmp(hdr,'Br-103')); id0=[id0,idx];
-idx = find(strcmp(hdr,'I-104')); id0=[id0,idx];
-idx = find(strcmp(hdr,'S-106')); id0=[id0,idx];
-idx = find(strcmp(hdr,'S-107')); id0=[id0,idx];
-idx = find(strcmp(hdr,'S-108')); id0=[id0,idx];
-idx = find(strcmp(hdr,'S-109')); id0=[id0,idx];
-idx = find(strcmp(hdr,'S-110')); id0=[id0,idx];
-idx = find(strcmp(hdr,'Si-111')); id0=[id0,idx];
-idx = find(strcmp(hdr,'B-112')); id0=[id0,idx];
-idx = find(strcmp(hdr,'P-115')); id0=[id0,idx];
-idx = find(strcmp(hdr,'P-116')); id0=[id0,idx];
-idx = find(strcmp(hdr,'P-117')); id0=[id0,idx];
-idx = find(strcmp(hdr,'P-118')); id0=[id0,idx];
-idx = find(strcmp(hdr,'P-119')); id0=[id0,idx];
-idx = find(strcmp(hdr,'P-120')); id0=[id0,idx];
-idx = find(strcmp(hdr,'qpmax')); id0=[id0,idx];
-idx = find(strcmp(hdr,'qnmax')); id0=[id0,idx];
-idx = find(strcmp(hdr,'Qpos')); id0=[id0,idx];
-idx = find(strcmp(hdr,'Qneg')); id0=[id0,idx];
-idx = find(strcmp(hdr,'Qtot')); id0=[id0,idx];
-idx = find(strcmp(hdr,'Qmean')); id0=[id0,idx];
-idx = find(strcmp(hdr,'Q2')); id0=[id0,idx];
-idx = find(strcmp(hdr,'RPCG')); id0=[id0,idx];
-idx = find(strcmp(hdr,'RNCG')); id0=[id0,idx];
-idx = find(strcmp(hdr,'SPP')); id0=[id0,idx];
-idx = find(strcmp(hdr,'LDI')); id0=[id0,idx];
-idx = find(strcmp(hdr,'Uc')); id0=[id0,idx];
-idx = find(strcmp(hdr,'Ui')); id0=[id0,idx];
-idx = find(strcmp(hdr,'Hy')); id0=[id0,idx];
-idx = find(strcmp(hdr,'AMR')); id0=[id0,idx];
-idx = find(strcmp(hdr,'TPSA(NO)')); id0=[id0,idx];
-idx = find(strcmp(hdr,'TPSA(Tot)')); id0=[id0,idx];
-idx = find(strcmp(hdr,'MLOGP')); id0=[id0,idx];
-idx = find(strcmp(hdr,'MLOGP2')); id0=[id0,idx];
-idx = find(strcmp(hdr,'ALOGP')); id0=[id0,idx];
-idx = find(strcmp(hdr,'ALOGP2')); id0=[id0,idx];
-idx = find(strcmp(hdr,'SAtot')); id0=[id0,idx];
-idx = find(strcmp(hdr,'SAacc')); id0=[id0,idx];
-idx = find(strcmp(hdr,'SAdon')); id0=[id0,idx];
-idx = find(strcmp(hdr,'Vx')); id0=[id0,idx];
-idx = find(strcmp(hdr,'VvdwMG')); id0=[id0,idx];
-idx = find(strcmp(hdr,'VvdwZAZ')); id0=[id0,idx];
-idx = find(strcmp(hdr,'PDI')); id0=[id0,idx];
-idx = find(strcmp(hdr,'BLTF96')); id0=[id0,idx];
-idx = find(strcmp(hdr,'BLTD48')); id0=[id0,idx];
-idx = find(strcmp(hdr,'BLTA96')); id0=[id0,idx];
-idx = find(strcmp(hdr,'Ro5')); id0=[id0,idx];
-idx = find(strcmp(hdr,'cRo5')); id0=[id0,idx];
-idx = find(strcmp(hdr,'DLS_01')); id0=[id0,idx];
-idx = find(strcmp(hdr,'DLS_02')); id0=[id0,idx];
-idx = find(strcmp(hdr,'DLS_03')); id0=[id0,idx];
-idx = find(strcmp(hdr,'DLS_04')); id0=[id0,idx];
-idx = find(strcmp(hdr,'DLS_05')); id0=[id0,idx];
-idx = find(strcmp(hdr,'DLS_06')); id0=[id0,idx];
-idx = find(strcmp(hdr,'DLS_07')); id0=[id0,idx];
-idx = find(strcmp(hdr,'DLS_cons')); id0=[id0,idx];
-idx = find(strcmp(hdr,'LLS_01')); id0=[id0,idx];
-idx = find(strcmp(hdr,'LLS_02')); id0=[id0,idx];
-idx = find(strcmp(hdr,'CMC-80')); id0=[id0,idx];
-idx = find(strcmp(hdr,'CMC-50')); id0=[id0,idx];
-idx = find(strcmp(hdr,'Inflammat-80')); id0=[id0,idx];
-idx = find(strcmp(hdr,'Inflammat-50')); id0=[id0,idx];
-idx = find(strcmp(hdr,'Depressant-80')); id0=[id0,idx];
-idx = find(strcmp(hdr,'Depressant-50')); id0=[id0,idx];
-idx = find(strcmp(hdr,'Psychotic-80')); id0=[id0,idx];
-idx = find(strcmp(hdr,'Psychotic-50')); id0=[id0,idx];
-idx = find(strcmp(hdr,'Hypertens-80')); id0=[id0,idx];
-idx = find(strcmp(hdr,'Hypertens-50')); id0=[id0,idx];
-idx = find(strcmp(hdr,'Hypnotic-80')); id0=[id0,idx];
-idx = find(strcmp(hdr,'Hypnotic-50')); id0=[id0,idx];
-idx = find(strcmp(hdr,'Neoplastic-80')); id0=[id0,idx];
-idx = find(strcmp(hdr,'Neoplastic-50')); id0=[id0,idx];
-idx = find(strcmp(hdr,'Infective-80')); id0=[id0,idx];
-idx = find(strcmp(hdr,'Infective-50')); id0=[id0,idx];
+function id0 = weighted_descriptor_indices(hdr)
+%WEIGHTED_DESCRIPTOR_INDICES Match the ordered descriptor-emphasis list.
+%   Return indices only; Step 01 applies WeightFactor to the scales.
+%   Exact matching and rule order are unchanged, including absent names.
+names = { ...
+    'MW', 'AMW', 'Sv', 'Se', 'Sp', 'Si', 'nAT', 'nSK', ...
+    'nTA', 'nBT', 'nBO', 'nBM', 'SCBO', 'RBN', 'RBF', 'nDB', ...
+    'nTB', 'nAB', 'nC', 'nN', 'nO', 'nP', 'nS', 'nF', ...
+    'nCL', 'nBR', 'nI', 'nB', 'nHM', 'nHet', 'nX', 'H%', ...
+    'C%', 'N%', 'O%', 'X%', 'nCsp3', 'nCsp2', 'nCsp', 'totalcharge', ...
+    'nCIC', 'nCIR', 'TRS', 'Rperim', 'Rbrid', 'MCD', 'RFD', 'NRS', ...
+    'NNRS', 'nR03', 'nR04', 'nR05', 'nR06', 'nR07', 'nR08', 'nR09', ...
+    'nR10', 'nR11', 'nR12', 'nBnz', 'ARR', 'P_VSA_ppp_L', 'P_VSA_ppp_P', 'P_VSA_ppp_N', ...
+    'P_VSA_ppp_D', 'P_VSA_ppp_A', 'P_VSA_ppp_ar', 'P_VSA_ppp_con', 'P_VSA_ppp_hal', 'P_VSA_ppp_cyc', 'P_VSA_ppp_ter', 'G1', ...
+    'G2', 'RGyr', 'SPAN', 'SPAM', 'MEcc', 'SPH', 'ASP', 'PJI3', ...
+    'L/Bw', 'HOMA', 'CMBL', 'AROM', 'HOMT', 'Tu', 'Tm', 'Tv', ...
+    'Te', 'Tp', 'Ti', 'Ts', 'Au', 'Am', 'Av', 'Ae', ...
+    'Ap', 'Ai', 'As', 'Gu', 'Gm', 'Ku', 'Km', 'Kv', ...
+    'Ke', 'Kp', 'Ki', 'Ks', 'Du', 'Dm', 'Dv', 'De', ...
+    'Dp', 'Di', 'Ds', 'Vu', 'Vm', 'Vv', 'Ve', 'Vp', ...
+    'Vi', 'Vs', 'nCp', 'nCs', 'nCt', 'nCq', 'nCrs', 'nCrt', ...
+    'nCrq', 'nCar', 'nCbH', 'nCb-', 'nCconj', 'nR=Cp', 'nR=Cs', 'nR=Ct', ...
+    'n=C=', 'nR#CH/X', 'nR#C-', 'nROCN', 'nArOCN', 'nRNCO', 'nArNCO', 'nRSCN', ...
+    'nArSCN', 'nRNCS', 'nArNCS', 'nRCOOH', 'nArCOOH', 'nRCOOR', 'nArCOOR', 'nRCONH2', ...
+    'nArCONH2', 'nRCONHR', 'nArCONHR', 'nRCONR2', 'nArCONR2', 'nROCON', 'nArOCON', 'nRCOX', ...
+    'nArCOX', 'nRCSOH', 'nArCSOH', 'nRCSSH', 'nArCSSH', 'nRCOSR', 'nArCOSR', 'nRCSSR', ...
+    'nArCSSR', 'nRCHO', 'nArCHO', 'nRCO', 'nArCO', 'nCONN', 'nC=O(O)2', 'nN=C-N<', ...
+    'nC(=N)N2', 'nRC=N', 'nArC=N', 'nRCNO', 'nArCNO', 'nRNH2', 'nArNH2', 'nRNHR', ...
+    'nArNHR', 'nRNR2', 'nArNR2', 'nN-N', 'nN=N', 'nRCN', 'nArCN', 'nN+', ...
+    'nNq', 'nRNHO', 'nArNHO', 'nRNNOx', 'nArNNOx', 'nRNO', 'nArNO', 'nRNO2', ...
+    'nArNO2', 'nN(CO)2', 'nC=N-N<', 'nROH', 'nArOH', 'nOHp', 'nOHs', 'nOHt', ...
+    'nROR', 'nArOR', 'nROX', 'nArOX', 'nO(C=O)2', 'nH2O', 'nSH', 'nC=S', ...
+    'nRSR', 'nRSSR', 'nSO', 'nS(=O)2', 'nSOH', 'nSOOH', 'nSO2OH', 'nSO3OH', ...
+    'nSO2', 'nSO3', 'nSO4', 'nSO2N', 'nPO3', 'nPO4', 'nPR3', 'nP(=O)O2R', ...
+    'nP(=O)R3/nPR5', 'nCH2RX', 'nCHR2X', 'nCR3X', 'nR=CHX', 'nR=CRX', 'nR#CX', 'nCHRX2', ...
+    'nCR2X2', 'nR=CX2', 'nCRX3', 'nArX', 'nCXr', 'nCXr=', 'nCconjX', 'nAziridines', ...
+    'nOxiranes', 'nThiranes', 'nAzetidines', 'nOxetanes', 'nThioethanes', 'nBeta-Lactams', 'nPyrrolidines', 'nOxolanes', ...
+    'ntH-Thiophenes', 'nPyrroles', 'nPyrazoles', 'nImidazoles', 'nFuranes', 'nThiophenes', 'nOxazoles', 'nIsoxazoles', ...
+    'nThiazoles', 'nIsothiazoles', 'nTriazoles', 'nPyridines', 'nPyridazines', 'nPyrimidines', 'nPyrazines', 'n135-Triazines', ...
+    'n124-Triazines', 'nHDon', 'nHAcc', 'nHBonds', 'C-001', 'C-002', 'C-003', 'C-004', ...
+    'C-005', 'C-006', 'C-007', 'C-008', 'C-009', 'C-010', 'C-011', 'C-012', ...
+    'C-013', 'C-014', 'C-015', 'C-016', 'C-017', 'C-018', 'C-019', 'C-020', ...
+    'C-021', 'C-022', 'C-023', 'C-024', 'C-025', 'C-026', 'C-027', 'C-028', ...
+    'C-029', 'C-030', 'C-031', 'C-032', 'C-033', 'C-034', 'C-035', 'C-036', ...
+    'C-037', 'C-038', 'C-039', 'C-040', 'C-041', 'C-042', 'C-043', 'C-044', ...
+    'H-046', 'H-047', 'H-048', 'H-049', 'H-050', 'H-051', 'H-052', 'H-053', ...
+    'H-054', 'H-055', 'O-056', 'O-057', 'O-058', 'O-059', 'O-060', 'O-061', ...
+    'O-062', 'O-063', 'Se-064', 'Se-065', 'N-066', 'N-067', 'N-068', 'N-069', ...
+    'N-070', 'N-071', 'N-072', 'N-073', 'N-074', 'N-075', 'N-076', 'N-077', ...
+    'N-078', 'N-079', 'F-081', 'F-082', 'F-083', 'F-084', 'F-085', 'Cl-086', ...
+    'Cl-087', 'Cl-088', 'Cl-089', 'Cl-090', 'Br-091', 'Br-092', 'Br-093', 'Br-094', ...
+    'Br-095', 'I-096', 'I-097', 'I-098', 'I-099', 'I-100', 'F-101', 'Cl-102', ...
+    'Br-103', 'I-104', 'S-106', 'S-107', 'S-108', 'S-109', 'S-110', 'Si-111', ...
+    'B-112', 'P-115', 'P-116', 'P-117', 'P-118', 'P-119', 'P-120', 'qpmax', ...
+    'qnmax', 'Qpos', 'Qneg', 'Qtot', 'Qmean', 'Q2', 'RPCG', 'RNCG', ...
+    'SPP', 'LDI', 'Uc', 'Ui', 'Hy', 'AMR', 'TPSA(NO)', 'TPSA(Tot)', ...
+    'MLOGP', 'MLOGP2', 'ALOGP', 'ALOGP2', 'SAtot', 'SAacc', 'SAdon', 'Vx', ...
+    'VvdwMG', 'VvdwZAZ', 'PDI', 'BLTF96', 'BLTD48', 'BLTA96', 'Ro5', 'cRo5', ...
+    'DLS_01', 'DLS_02', 'DLS_03', 'DLS_04', 'DLS_05', 'DLS_06', 'DLS_07', 'DLS_cons', ...
+    'LLS_01', 'LLS_02', 'CMC-80', 'CMC-50', 'Inflammat-80', 'Inflammat-50', 'Depressant-80', 'Depressant-50', ...
+    'Psychotic-80', 'Psychotic-50', 'Hypertens-80', 'Hypertens-50', 'Hypnotic-80', 'Hypnotic-50', 'Neoplastic-80', 'Neoplastic-50', ...
+    'Infective-80', 'Infective-50' ...
+};
+id0 = [];
+for nameIndex = 1:numel(names)
+    id0 = [id0, find(strcmp(hdr, names{nameIndex}))]; %#ok<AGROW>
+end
+end

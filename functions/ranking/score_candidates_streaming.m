@@ -4,12 +4,15 @@ function [distanceByMask, moleculeNames, selectedDescriptorNames, audit] = ...
     normalizationScale, referenceVector, masks, ...
     expectedTotalRows, expectedDescriptorCount, ...
     chunkRows, progressInterval)
-%SCORE_CANDIDATES_STREAMING Score all molecules under fixed descriptor-subspace models.
-%   The raw table is streamed once. Missing entries use frozen background
-%   medians; values are divided by the frozen weighted scales, without refitting.
-%   MASKS is model-by-selected-feature, REFERENCEVECTOR is 1-by-selected-feature.
-%   Output distances are molecule-by-model Euclidean distances to the medoid;
-%   molecule/header alignment and imputation counts are audited.
+%SCORE_CANDIDATES_STREAMING Compute distances in fitted descriptor subspaces.
+%   FILEPATH is a Dragon TXT or ordered part directory. Descriptor indices refer
+%   to the raw columns after the two identifiers. MASKS is M-by-pUnion;
+%   REFERENCEVECTOR is the scaled medoid (1-by-pUnion). Imputation values and
+%   scaling divisors are fixed 1-by-pUnion rows from background preprocessing.
+%
+%   DISTANCEBYMASK is N-by-M: d_im=sqrt(sum_j z_mj*(x_ij-x_medoid,j)^2).
+%   All N source rows are scored; Step 03 subsequently retains screening rows.
+%   No per-compound columns are dropped, and no preprocessing is refitted.
 
 arguments
     filePath (1, 1) string
@@ -136,6 +139,8 @@ while ~stream.AtEnd()
     end
     lastName = currentNames(end);
 
+    % Apply one common imputation/scaling transform to every compound.
+    % Keeping the full selected schema makes distances comparable within a model.
     nonfiniteMask = ~isfinite(descriptorValues);
     if any(nonfiniteMask, 'all')
         imputedCountBySelectedFeature = ...
@@ -150,6 +155,8 @@ while ~stream.AtEnd()
         'Frozen preprocessing left NaN or Inf near row %d.', ...
         totalRowsRead + 1);
 
+    % Matrix multiplication selects each model's columns from the union.
+    % The square root is taken after summing squared coordinate differences.
     squaredDelta = (descriptorValues - referenceVector).^2;
     currentDistance = sqrt(squaredDelta * double(masks).');
 

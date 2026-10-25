@@ -1,8 +1,14 @@
 function outputs = step00_prepare_dataset(configInput)
-%STEP00_PREPARE_DATASET Audit descriptors, deduplicate identities, and freeze dataset partitions.
-%   With no input, use the formal profile from functions/pso_mdl_config.m.
-%   CONFIGINPUT can also be a profile name or a configuration structure.
-%   Results are written only under the configured output directory.
+%STEP00_PREPARE_DATASET Define the reference, background and screening sets.
+%   Run directly; edit paths and parameters in functions/pso_mdl_config.m.
+%   An optional configuration structure can specify a separate run.
+%
+%   Input: candidate/reference descriptor tables and aligned identity manifests.
+%   Rows represent compounds; columns after No. and NAME are descriptors.
+%   Output: fixed row partitions, descriptor-availability counts and input audits
+%   under cfg.Output.Directory. No descriptor scaling is fitted in this step.
+
+%% 1. Configuration and output files
 root = fileparts(mfilename('fullpath'));
 addpath(root);
 addpath(fullfile(root, 'functions'));
@@ -32,7 +38,7 @@ referenceChunkRows = cfg.IO.ReferenceChunkRows;
 progressInterval = cfg.IO.ProgressInterval;
 computeInputSHA256 = cfg.IO.ComputeInputSHA256;
 
-% Freeze identities and partition membership before descriptor fitting.
+% SourceRow locates a record in the original table; it is not a chemical identity.
 deduplicationAuditFile = fullfile(auditDir, ...
     'candidate_deduplication_audit.tsv');
 partitionTableFile = fullfile(auditDir, ...
@@ -57,6 +63,8 @@ fprintf('\n=== STEP 00: descriptor audit, deduplication, and partitioning ===\n'
 fprintf('Started: %s\n', char(startedAt, 'yyyy-MM-dd HH:mm:ss'));
 fprintf('Repository: %s\n\n', projectRoot);
 
+%% 2. Input alignment and identity-based exclusions
+% All descriptor parts form one table with a common column order and global No.
 if isfolder(cfg.Input.CandidateDescriptors)
     candidateDescriptorFile = cfg.Input.CandidateDescriptors;
 else
@@ -121,6 +129,8 @@ fprintf(['Candidate rows %d; unique stable identities %d; duplicate nonrepresent
 writetable(deduplicationAudit, deduplicationAuditFile, ...
     'FileType', 'text', 'Delimiter', '\t');
 
+%% 3. Descriptor availability in the reference set and complete candidate library
+% This is a missing-value audit, not estimation of scaling or imputation values.
 fprintf('\n[2/5] Reading reference descriptors and auditing missingness...\n');
 [referenceRaw, referenceDragonNames, ...
     readReferenceDescriptorNames, referenceReadAudit] = ...
@@ -246,6 +256,9 @@ missingnessTable = table( ...
 writetable(missingnessTable, missingnessOutputFile, ...
     'FileType', 'text', 'Delimiter', '\t');
 
+%% 4. Background selection and disjoint screening partition
+% In property-matched mode, six basic properties define background membership.
+% Screening compounds are the eligible records not selected as background.
 fprintf('\n[4/5] Constructing %s background and holdout partitions...\n', ...
     backgroundSelectionMode);
 if lower(backgroundSelectionMode) == "property_matched"
@@ -321,6 +334,7 @@ writetable(excludedTable, excludedTableFile, ...
 writetable(propertySummary, propertySummaryFile, ...
     'FileType', 'text', 'Delimiter', '\t');
 
+%% 5. Input checksums and reproducibility information
 fprintf('\n[5/5] Recording input versions and software environment...\n');
 hashPaths = [ ...
     candidateHeaderAudit.SourceFiles(:); ...
@@ -369,6 +383,8 @@ inputHashTable = table(hashRoles, fileName, fileBytes, sha256, ...
 writetable(inputHashTable, inputHashFile, ...
     'FileType', 'text', 'Delimiter', '\t');
 
+%% 6. Save partitions and metadata for Steps 01 and 03
+% Preserve background draw order: matrix rows and compound identities must align.
 backgroundRows = double( ...
     partitionMetadata.BackgroundRowsInDrawOrder(:));
 backgroundNames = string(partitionTable.DragonName(backgroundRows));

@@ -6,6 +6,8 @@ function [selectedData, selectedNames, descriptorNames, audit] = ...
 %   SELECTEDROWS are unique 1-based physical data-row positions. Expected row
 %   and feature counts are checked, including consecutive sequence numbers.
 %   Outputs contain selected raw descriptors, names, ordered headers and audit.
+%   SELECTEDDATA is numel(SELECTEDROWS)-by-p in requested row order, not sorted
+%   source order. Its units are the original Dragon descriptor units.
 
 arguments
     filePath (1, 1) string

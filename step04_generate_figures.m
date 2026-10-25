@@ -1,35 +1,19 @@
-function outputs = step04_generate_figures(configInput, options)
-%STEP04_GENERATE_FIGURES Plot this project's completed Step 02/03 results.
-%   STEP04_GENERATE_FIGURES defaults to the configured pipeline outputs and
-%   recomputes figure/ensemble statistics in results/research/figures.
-%   STEP04_GENERATE_FIGURES("saved") explicitly redraws the historical paper
-%   bundle in data/paper_results into results/paper_figures instead.
-%   Passing CFG also selects pipeline mode. Neither mode retrains models or
-%   changes candidate ranks. Missing pipeline data never trigger a saved fallback.
-%   DataDirectory, OutputDirectory, Show, Overwrite and Dpi apply to saved mode.
+function outputs = step04_generate_figures(configInput)
+%STEP04_GENERATE_FIGURES Plot Figures 3 and 4 from the current run.
+%   Run after Steps 02-03; figure settings are in functions/pso_mdl_config.m.
+%   An optional configuration structure can specify a separate run.
+%
+%   Input: this run's saved model summaries, optimization histories and ranks.
+%   Output: eight PNG/PDF panels, their source statistics and figure legends.
+%   Shading shows empirical quartiles, not confidence intervals. Plotting does
+%   not retrain models, change descriptor subsets or reorder screening compounds.
 arguments
-    configInput = "pipeline"
-    options.DataDirectory (1,1) string = ""
-    options.OutputDirectory (1,1) string = ""
-    options.Show (1,1) logical = false
-    options.Overwrite (1,1) logical = false
-    options.Dpi (1,1) double {mustBePositive,mustBeFinite} = 600
+    configInput = "formal"
 end
+%% 1. Configuration and saved results from the current run
 root = fileparts(mfilename('fullpath'));
 addpath(root);
 addpath(fullfile(root, 'functions'));
-if (ischar(configInput) || isstring(configInput)) && isscalar(string(configInput))
-    mode = lower(string(configInput));
-    if mode == "saved"
-        resolve_pso_mdl_config("formal");
-        outputs = plot_saved_paper_figures(options.DataDirectory, ...
-            options.OutputDirectory, 'Show', options.Show, ...
-            'Overwrite', options.Overwrite, 'Dpi', options.Dpi);
-        return;
-    elseif mode == "pipeline"
-        configInput = "formal";
-    end
-end
 cfg = resolve_pso_mdl_config(configInput);
 paths = pso_mdl_paths(cfg);
 resultDir = paths.Results;
@@ -87,6 +71,7 @@ step02Mat = load(step02MatFile, ...
 step03Mat = load(step03MatFile, ...
     'rankByCandidate', 'finalRank', 'holdoutGlobalRow', 'summary');
 
+%% 2. Verify objective definitions, data dimensions and summary statistics
 localAssertTableColumns(step02FigureTable, { ...
     'PSOIteration', 'MedianBestFitness', 'BestFitnessQ1', ...
     'BestFitnessQ3', 'MedianSelectedDescriptorCount', ...
@@ -210,6 +195,8 @@ assert(numel(finalRank) == formalCandidateCount ...
 assert(isequal(sort(finalRank), (1:formalCandidateCount).'), ...
     'Step 03 finalRank is not a complete permutation of 1:N.');
 
+%% 3. Relationships between descriptor breadth F, relative separation R and |J|
+% RelativeGap is the saved field name for R; retain it for file compatibility.
 finalF = double(modelSummaryTable.SelectedFeatureCount(:));
 finalRelativeGap = double(modelSummaryTable.RelativeGap(:));
 finalAbsFitness = abs(double(modelSummaryTable.BestFitness(:)));
@@ -237,6 +224,8 @@ correlationFile = fullfile(resultDir, ...
 writetable(correlationTable, correlationFile, ...
     'FileType', 'text', 'Delimiter', '\t');
 
+%% 4. Stability of two disjoint M-model ensembles
+% Each pair is drawn from the saved models; no new PSO optimization is run.
 ensembleSubsetSizes = unique(double(ensembleSubsetSizesRequested(:).'));
 maximumIndependentSize = floor(modelCount / 2);
 ensembleSubsetSizes = ensembleSubsetSizes( ...
@@ -277,6 +266,8 @@ for sizeIndex = 1:ensembleSizeCount
         rankB = zeros(formalCandidateCount, 1);
         rankB(orderB) = (1:formalCandidateCount).';
 
+        % Pearson correlation of the complete ordinal-rank permutations is
+        % their Spearman correlation. Exact mean-rank ties use SourceRow.
         independentSpearman(repeatIndex, sizeIndex) = corr(rankA, rankB);
 
         topMaskA = false(formalCandidateCount, 1);
@@ -324,6 +315,7 @@ ensembleSummaryFile = fullfile(resultDir, ...
 writetable(ensembleSummaryTable, ensembleSummaryFile, ...
     'FileType', 'text', 'Delimiter', '\t');
 
+%% 5. Panel names and common plotting settings
 fig3aBase = fullfile(figureDir, 'FIG3A');
 fig3bBase = fullfile(figureDir, 'FIG3B');
 fig3cBase = fullfile(figureDir, 'FIG3C');
@@ -362,6 +354,8 @@ jaccardMedian = double(step03JaccardTable.MedianJaccard);
 jaccardQ1 = double(step03JaccardTable.JaccardQ1);
 jaccardQ3 = double(step03JaccardTable.JaccardQ3);
 
+%% Figure 3A. Best-so-far objective: median and interquartile range across seeds
+% FitnessDisplayScale changes displayed units only; saved J values are unchanged.
 fig3a = figure('Visible', figureVisibility, 'Color', 'w', ...
     'Units', 'centimeters', 'Position', [2, 2, regularFigureSizeCm(1), regularFigureSizeCm(2)]);
 ax = axes(fig3a);
@@ -380,6 +374,8 @@ hold(ax, 'off');
 drawnow;
 export_publication_figure(fig3a, fig3aBase, figureResolutionDpi);
 
+%% Figure 3B. Descriptor count of the corresponding best-so-far solutions
+% F follows the best solution; it need not increase monotonically with generation.
 fig3b = figure('Visible', figureVisibility, 'Color', 'w', ...
     'Units', 'centimeters', 'Position', [2, 2, regularFigureSizeCm(1), regularFigureSizeCm(2)]);
 ax = axes(fig3b);
@@ -398,6 +394,7 @@ hold(ax, 'off');
 drawnow;
 export_publication_figure(fig3b, fig3bBase, figureResolutionDpi);
 
+%% Figure 3C. One final (F,R) observation per independent PSO run
 fig3c = figure('Visible', figureVisibility, 'Color', 'w', ...
     'Units', 'centimeters', 'Position', [2, 2, regularFigureSizeCm(1), regularFigureSizeCm(2)]);
 ax = axes(fig3c);
@@ -416,6 +413,8 @@ hold(ax, 'off');
 drawnow;
 export_publication_figure(fig3c, fig3cBase, figureResolutionDpi);
 
+%% Figure 4A. Descriptor-selection frequencies, ordered for display only
+% A frequency is a fraction of models, not a coefficient in the distance metric.
 fig4a = figure('Visible', figureVisibility, 'Color', 'w', ...
     'Units', 'centimeters', 'Position', [2, 2, regularFigureSizeCm(1), regularFigureSizeCm(2)]);
 ax = axes(fig4a);
@@ -433,6 +432,7 @@ hold(ax, 'off');
 drawnow;
 export_publication_figure(fig4a, fig4aBase, figureResolutionDpi);
 
+%% Figure 4B. Pairwise agreement of single-model Top-K candidate sets
 fig4b = figure('Visible', figureVisibility, 'Color', 'w', ...
     'Units', 'centimeters', 'Position', [2, 2, regularFigureSizeCm(1), regularFigureSizeCm(2)]);
 ax = axes(fig4b);
@@ -457,6 +457,7 @@ hold(ax, 'off');
 drawnow;
 export_publication_figure(fig4b, fig4bBase, figureResolutionDpi);
 
+%% Figure 4D. Full-ranking agreement between disjoint ensembles
 fig4d = figure('Visible', figureVisibility, 'Color', 'w', ...
     'Units', 'centimeters', 'Position', [2, 2, regularFigureSizeCm(1), regularFigureSizeCm(2)]);
 ax = axes(fig4d);
@@ -481,6 +482,7 @@ hold(ax, 'off');
 drawnow;
 export_publication_figure(fig4d, fig4dBase, figureResolutionDpi);
 
+%% Figure 4E. Top-K set agreement between disjoint ensembles
 fig4e = figure('Visible', figureVisibility, 'Color', 'w', ...
     'Units', 'centimeters', 'Position', [2, 2, regularFigureSizeCm(1), regularFigureSizeCm(2)]);
 ax = axes(fig4e);
@@ -503,6 +505,8 @@ hold(ax, 'off');
 drawnow;
 export_publication_figure(fig4e, fig4eBase, figureResolutionDpi);
 
+%% Figure 4C. Cross-model ranks of the final top candidates
+% P10-P90 and min-max describe variation across models, not sampling-error bounds.
 fig4c = figure('Visible', figureVisibility, 'Color', 'w', ...
     'Units', 'centimeters', 'Position', [2, 2, tallFigureSizeCm(1), tallFigureSizeCm(2)]);
 ax = axes(fig4c);
@@ -544,6 +548,7 @@ hold(ax, 'off');
 drawnow;
 export_publication_figure(fig4c, fig4cBase, figureResolutionDpi);
 
+%% 6. Export figure legends and verify the eight PNG/PDF pairs
 legendFile = fullfile(resultDir, 'figure_legends.txt');
 legendId = fopen(legendFile, 'w', 'n', 'UTF-8');
 assert(legendId >= 0, 'Cannot write figure legends: %s', legendFile);
@@ -594,41 +599,8 @@ statusFile = fullfile(statusDir, '04_complete.txt');
 statusId = fopen(statusFile, 'w', 'n', 'UTF-8');
 assert(statusId >= 0, 'Cannot write Step 04 status file.');
 statusCleanup = onCleanup(@() fclose(statusId));
-fprintf(statusId, [ ...
-    'COMPLETE\n' ...
-    'ModelCount=%d\n' ...
-    'GenerationCount=%d\n' ...
-    'Objective=%s\n' ...
-    'PAggregation=mean_non_medoid\nPRange=0-100\n' ...
-    'EnsembleSubsetSizes=%s\n' ...
-    'EnsembleStabilityRepeats=%d\n' ...
-    'EnsembleStabilityRandomSeed=%d\n' ...
-    'EnsembleTopK=%d\n' ...
-    'Spearman_F_vs_R=%.12g\n' ...
-    'Spearman_F_vs_absJ=%.12g\n' ...
-    'Spearman_R_vs_absJ=%.12g\n' ...
-    'Step02MAT=%s\n' ...
-    'Step03MAT=%s\n' ...
-    'FIG3A=%s\n' ...
-    'FIG3B=%s\n' ...
-    'FIG3C=%s\n' ...
-    'FIG4A=%s\n' ...
-    'FIG4B=%s\n' ...
-    'FIG4D=%s\n' ...
-    'FIG4E=%s\n' ...
-    'FIG4C=%s\n' ...
-    'EnsembleSensitivitySummary=%s\n' ...
-    'Legends=%s\n' ...
-    'CreatedAt=%s\n'], ...
-    modelCount, generationCount, expectedObjective, ...
-    mat2str(ensembleSubsetSizes), ensembleStabilityRepeats, ...
-    ensembleStabilityRandomSeed, actualEnsembleTopK, ...
-    rhoFvsR, rhoFvsAbsJ, rhoRvsAbsJ, ...
-    step02MatFile, step03MatFile, ...
-    fig3aBase, fig3bBase, fig3cBase, fig4aBase, ...
-    fig4bBase, fig4dBase, fig4eBase, fig4cBase, ...
-    ensembleSummaryFile, legendFile, ...
-    char(datetime('now', 'Format', "yyyyMMdd'T'HHmmss")));
+fprintf(statusId, 'COMPLETE\nModels=%d\nGenerations=%d\nFigureCount=8\n', ...
+    modelCount, generationCount);
 clear statusCleanup
 
 fprintf('\n============================================================\n');

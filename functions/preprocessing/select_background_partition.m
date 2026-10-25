@@ -3,12 +3,15 @@ function [partitionTable, backgroundTable, holdoutTable, ...
     select_background_partition( ...
     deduplicationAudit, candidateProperties, ...
     targetProperties, targetNames, propertyNames, options)
-%SELECT_BACKGROUND_PARTITION Freeze disjoint background, screening and excluded partitions.
-%   Inputs combine identity audits with aligned matching-property matrices.
-%   Property matching uses the validated robust property normalization, nearest
-%   reference ordering and round-robin quotas. Random selection is optional.
-%   Background count supports fixed, fractional and capped-fractional modes.
-%   Outputs preserve draw order and record the exact membership and selection rules.
+%SELECT_BACKGROUND_PARTITION Select background compounds and freeze membership.
+%   CANDIDATEPROPERTIES is nCandidate-by-q and TARGETPROPERTIES is nReference-by-q,
+%   with q matching properties in the order of PROPERTYNAMES. Rows must align
+%   with the identity audit and reference names. Target denotes reference drugs.
+%
+%   Property-matched mode orders candidates by scaled RMS property distance to
+%   each reference and allocates disjoint representatives by round-robin quotas.
+%   Random mode samples without replacement using the configured seed.
+%   Output partitions are mutually exclusive; background draw order is retained.
 
 arguments
     deduplicationAudit table
@@ -59,6 +62,8 @@ assert(maximumAllowedBackground >= options.MinimumCount, ...
      ' %d holdout molecules. Check inputs or explicitly lower these limits.'], ...
     eligibleCount, options.MinimumCount, options.MinimumHoldoutCount);
 
+% capped_fraction uses min(MaximumCount, round(Fraction*nEligible)), followed
+% by the configured minimum background and minimum screening-count constraints.
 switch sizeMode
     case "fixed"
         backgroundCount = options.FixedCount;
@@ -120,6 +125,8 @@ if selectionMode == "property_matched"
             propertyCenter(propertyIndex);
     end
 
+    % Matching uses median absolute deviation about the median, with SD fallback.
+    % This is distinct from Step 01's mean-AD descriptor scaling for the objective.
     propertyScale = median(abs( ...
         eligibleProperties - propertyCenter), 1);
     for propertyIndex = 1:numel(propertyNames)
@@ -140,6 +147,8 @@ if selectionMode == "property_matched"
     targetStandardized = ...
         (targetProperties - propertyCenter) ./ propertyScale;
     targetCount = size(targetStandardized, 1);
+    % RMS across q scaled properties: this selects background records only.
+    % It is not D1/D2, which use Euclidean distances in the optimized subspace.
     distanceToTargets = zeros( ...
         eligibleCount, targetCount, 'single');
     for targetIndex = 1:targetCount
@@ -166,6 +175,7 @@ if selectionMode == "property_matched"
             uint32(currentOrder);
     end
 
+    % Balance reference-specific quotas and never assign one compound twice.
     baseQuota = floor(backgroundCount / targetCount);
     targetQuota = repmat(baseQuota, targetCount, 1);
     targetQuota(1:mod(backgroundCount, targetCount)) = ...
@@ -216,6 +226,7 @@ else
     clear cleanupRandomState
 end
 
+% Only eligible, non-background records enter the subsequent candidate ranking.
 isBackground = false(candidateCount, 1);
 isBackground(selectedRowsInDrawOrder) = true;
 isHoldout = isEligible & ~isBackground;

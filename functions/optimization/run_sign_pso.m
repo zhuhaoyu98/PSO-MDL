@@ -1,15 +1,17 @@
 function result = run_sign_pso(context, varargin)
-%RUN_SIGN_PSO Run the validated bounded sign-encoded PSO search.
-%   Continuous positions select descriptors by sign. The standard x=x+v update
-%   uses elementwise random learning coefficients, fixed-horizon declining
-%   inertia and decaying sign-flip mutation with nonzero late-stage floors.
-%   Fitness comparisons use strict improvement. All requested generations run;
-%   the stall criterion is a post-run diagnostic and never an early-stop rule.
-%   Named options retain the formal search defaults. RNG state is restored.
-%   RESULT contains final masks, diagnostic histories, schedules and provenance.
-%   Compare unnormalized keys K=(nRef-1)*J, evaluated before P is averaged,
-%   to preserve historical floating-point tie decisions. Reported fitness J
-%   and proximity P retain the mean-percentile definition and scale.
+%RUN_SIGN_PSO Search descriptor subsets using bounded, sign-encoded PSO.
+%   CONTEXT fixes the compounds, medoid and objective J=-R*F*P. Named options
+%   specify particle count, generations, seed and the search/mutation schedules.
+%   Positions and velocities are nParticle-by-p; z=(position>0) defines a subset.
+%   Position magnitudes are retained during the continuous update x=x+v.
+%
+%   RESULT contains the final subset, J/R/F/P and best-so-far scalar histories.
+%   Selection compares K=(nR-1)*J with strict improvement; the first minimum
+%   is retained on exact ties. Reported J and P use the mean-percentile scale.
+%   All requested generations run. StallWindow assesses final-window change
+%   after the search; it does not stop the optimizer. Caller RNG is restored.
+
+%% Search options and context checks
 
 parser = inputParser;
 parser.FunctionName = mfilename;
@@ -99,6 +101,8 @@ if options.StallWindow >= generationCount
         'StallWindow must be smaller than GenerationCount.');
 end
 
+%% Seeded initialization
+% Generation 1 records the initial population; updates begin at generation 2.
 savedRngState = rng;
 cleanupRandomState = onCleanup(@() rng(savedRngState));
 rng(options.RandomSeed, 'twister');
@@ -136,32 +140,13 @@ bestComparisonKeyByGeneration = zeros(generationCount, 1);
 selectedFeatureCountByGeneration = zeros(generationCount, 1);
 bestD1ByGeneration = zeros(generationCount, 1);
 bestD2ByGeneration = zeros(generationCount, 1);
-bestSeparationByGeneration = zeros(generationCount, 1);
 bestRelativeGapByGeneration = zeros(generationCount, 1);
-bestD2OverD1ByGeneration = zeros(generationCount, 1);
 bestPByGeneration = zeros(generationCount, 1);
-bestPositionByGeneration = zeros(generationCount, featureCount);
-bestMaskByGeneration = false(generationCount, featureCount);
-signedContinuousSumByGeneration = zeros(generationCount, 1);
-positiveMagnitudeSumByGeneration = zeros(generationCount, 1);
-negativeMagnitudeSumByGeneration = zeros(generationCount, 1);
-invalidParticleCountByGeneration = zeros(generationCount, 1);
-meanBinaryDiversityByGeneration = zeros(generationCount, 1);
-velocitySaturationFractionByGeneration = zeros(generationCount, 1);
-mutationFlipCountByGeneration = zeros(generationCount, 1);
-inertiaWeightByGeneration = zeros(generationCount, 1);
-particleMutationRateByGeneration = zeros(generationCount, 1);
-featureMutationRateByGeneration = zeros(generationCount, 1);
-scheduleProgressByGeneration = zeros(generationCount, 1);
 
 [currentInertiaWeight, currentParticleMutationRate, ...
-    currentFeatureMutationRate, currentScheduleProgress] = ...
+    currentFeatureMutationRate, ~] = ...
     localScheduleValues(1);
-inertiaWeightByGeneration(1) = currentInertiaWeight;
-particleMutationRateByGeneration(1) = currentParticleMutationRate;
-featureMutationRateByGeneration(1) = currentFeatureMutationRate;
-scheduleProgressByGeneration(1) = currentScheduleProgress;
-recordGeneration(1, 0, 0);
+recordGeneration(1);
 
 if options.Verbose
     fprintf(['PSO-MDL relative-gap seed %d: generation 1/%d, J=%.9g, ' ...
@@ -172,17 +157,11 @@ if options.Verbose
         personalBestP(globalBestIndex));
 end
 
+%% Particle dynamics, sign-flip mutation and best-so-far updates
 for idxGeneration = 2:generationCount
     [currentInertiaWeight, currentParticleMutationRate, ...
-        currentFeatureMutationRate, currentScheduleProgress] = ...
+        currentFeatureMutationRate, ~] = ...
         localScheduleValues(idxGeneration);
-    inertiaWeightByGeneration(idxGeneration) = currentInertiaWeight;
-    particleMutationRateByGeneration(idxGeneration) = ...
-        currentParticleMutationRate;
-    featureMutationRateByGeneration(idxGeneration) = ...
-        currentFeatureMutationRate;
-    scheduleProgressByGeneration(idxGeneration) = currentScheduleProgress;
-
     % Draw independent learning coefficients for each particle-feature pair.
     r1 = rand(particleCount, featureCount);
     r2 = rand(particleCount, featureCount);
@@ -196,8 +175,6 @@ for idxGeneration = 2:generationCount
 
     velocity = min(max(velocity, -options.VelocityLimit), ...
         options.VelocityLimit);
-    velocitySaturationFraction = mean( ...
-        abs(velocity) >= options.VelocityLimit - 10 * eps, 'all');
 
     % Preserve continuous magnitudes; only their signs encode feature selection.
     population = population + velocity;
@@ -267,30 +244,22 @@ for idxGeneration = 2:generationCount
     [globalBestComparisonKey, globalBestIndex] = min(personalBestComparisonKey);
     globalBestFitness = personalBestFitness(globalBestIndex);
     globalBestPosition = personalBestPosition(globalBestIndex, :);
-    recordGeneration(idxGeneration, mutationFlipCount, ...
-        velocitySaturationFraction);
+    recordGeneration(idxGeneration);
 
     if options.Verbose && (idxGeneration == 2 ...
             || mod(idxGeneration, options.VerboseInterval) == 0 ...
             || idxGeneration == generationCount)
-        fprintf(['PSO-MDL relative-gap seed %d: generation %d/%d, J=%.9g, ' ...
-            'F=%d, relative gap=%.6g, P=%.6g, invalid=%d, ' ...
-            'diversity=%.4f, flips=%d, w=%.4f, pParticle=%.5f, ' ...
-            'pFeature=%.6f\n'], ...
+        fprintf(['PSO-MDL seed %d: generation %d/%d, J=%.9g, ' ...
+            'F=%d, R=%.6g, P=%.6g\n'], ...
             options.RandomSeed, idxGeneration, generationCount, ...
             globalBestFitness, personalBestF(globalBestIndex), ...
-            personalBestRelativeGap(globalBestIndex), ...
-            personalBestP(globalBestIndex), ...
-            invalidParticleCountByGeneration(idxGeneration), ...
-            meanBinaryDiversityByGeneration(idxGeneration), ...
-            mutationFlipCountByGeneration(idxGeneration), ...
-            currentInertiaWeight, currentParticleMutationRate, ...
-            currentFeatureMutationRate);
+            personalBestRelativeGap(globalBestIndex), personalBestP(globalBestIndex));
     end
 end
 
-% Post-run diagnostics only: these values never alter the search path.
-% Post-run diagnostics only: these tolerances do not stop or steer the search.
+%% Post-run convergence assessment
+% Relative change is (J_(G-window)-J_G)/max(abs(J_(G-window)),eps).
+% This retrospective diagnostic never stops or steers the search.
 objectiveTolerance = 1e-12 * max(1, max(abs(bestFitnessByGeneration)));
 lastImprovementIndex = find( ...
     diff(bestFitnessByGeneration) < -objectiveTolerance, 1, 'last');
@@ -308,8 +277,6 @@ finalWindowRelativeImprovement = ...
 convergedByStallCriterion = ...
     finalWindowRelativeImprovement < options.StallRelativeTolerance;
 
-maskChanged = [true; any(bestMaskByGeneration(2:end, :) ~= ...
-    bestMaskByGeneration(1:end-1, :), 2)];
 monotonicViolationCount = sum( ...
     diff(bestFitnessByGeneration) > objectiveTolerance);
 
@@ -323,6 +290,7 @@ if abs(bestFitnessByGeneration(end) - globalBestFitness) > objectiveTolerance
         'Final history value disagrees with globalBestFitness.');
 end
 
+%% Export the final model and scalar optimization histories
 result = struct();
 result.Version = 6;
 result.MethodLabel = ...
@@ -387,39 +355,11 @@ result.SelectedFeatureCountByGeneration = ...
     selectedFeatureCountByGeneration;
 result.BestD1ByGeneration = bestD1ByGeneration;
 result.BestD2ByGeneration = bestD2ByGeneration;
-result.BestSeparationByGeneration = bestSeparationByGeneration;
 result.BestRelativeGapByGeneration = bestRelativeGapByGeneration;
-result.BestD2OverD1ByGeneration = bestD2OverD1ByGeneration;
 result.BestPByGeneration = bestPByGeneration;
-result.BestPositionByGeneration = bestPositionByGeneration;
-result.BestMaskByGeneration = bestMaskByGeneration;
-result.SignedContinuousSumByGeneration = ...
-    signedContinuousSumByGeneration;
-result.PositiveMagnitudeSumByGeneration = ...
-    positiveMagnitudeSumByGeneration;
-result.NegativeMagnitudeSumByGeneration = ...
-    negativeMagnitudeSumByGeneration;
-result.InvalidParticleCountByGeneration = ...
-    invalidParticleCountByGeneration;
-result.MeanBinaryDiversityByGeneration = ...
-    meanBinaryDiversityByGeneration;
-result.VelocitySaturationFractionByGeneration = ...
-    velocitySaturationFractionByGeneration;
-result.MutationFlipCountByGeneration = ...
-    mutationFlipCountByGeneration;
-result.InertiaWeightByGeneration = inertiaWeightByGeneration;
-result.ParticleMutationRateByGeneration = ...
-    particleMutationRateByGeneration;
-result.FeatureMutationRateByGeneration = ...
-    featureMutationRateByGeneration;
-result.ScheduleProgressByGeneration = scheduleProgressByGeneration;
 result.FinalWindowRelativeImprovement = finalWindowRelativeImprovement;
 result.ConvergedByStallCriterion = convergedByStallCriterion;
-result.MaskChangedByGeneration = maskChanged;
 result.LastImprovementGeneration = lastImprovementGeneration;
-result.LastMaskChangeGeneration = find(maskChanged, 1, 'last');
-result.UniqueGlobalBestMaskCount = ...
-    size(unique(bestMaskByGeneration, 'rows'), 1);
 result.MonotonicViolationCount = monotonicViolationCount;
 result.RuntimeSeconds = toc(runTimer);
 result.CreatedAt = char(datetime('now', ...
@@ -427,7 +367,7 @@ result.CreatedAt = char(datetime('now', ...
 
     function [wValue, particleRate, featureRate, progress] = ...
             localScheduleValues(generationIndex)
-
+        % Progress is tied to the fixed schedule horizon, not fitness history.
         if scheduleHorizon <= 1
             progress = 1;
         else
@@ -461,8 +401,7 @@ result.CreatedAt = char(datetime('now', ...
         end
     end
 
-    function recordGeneration(generationIndex, mutationFlipCount, ...
-            velocitySaturationFraction)
+    function recordGeneration(generationIndex)
         bestFitnessByGeneration(generationIndex) = globalBestFitness;
         bestComparisonKeyByGeneration(generationIndex) = globalBestComparisonKey;
         selectedFeatureCountByGeneration(generationIndex) = ...
@@ -471,34 +410,10 @@ result.CreatedAt = char(datetime('now', ...
             personalBestD1(globalBestIndex);
         bestD2ByGeneration(generationIndex) = ...
             personalBestD2(globalBestIndex);
-        bestSeparationByGeneration(generationIndex) = ...
-            personalBestSeparation(globalBestIndex);
         bestRelativeGapByGeneration(generationIndex) = ...
             personalBestRelativeGap(globalBestIndex);
-        bestD2OverD1ByGeneration(generationIndex) = ...
-            personalBestD2OverD1(globalBestIndex);
         bestPByGeneration(generationIndex) = ...
             personalBestP(globalBestIndex);
-        bestPositionByGeneration(generationIndex, :) = ...
-            globalBestPosition;
-        bestMaskByGeneration(generationIndex, :) = ...
-            globalBestPosition > 0;
-        signedContinuousSumByGeneration(generationIndex) = ...
-            sum(globalBestPosition);
-        positiveMagnitudeSumByGeneration(generationIndex) = ...
-            sum(max(globalBestPosition, 0));
-        negativeMagnitudeSumByGeneration(generationIndex) = ...
-            sum(min(globalBestPosition, 0));
-        invalidParticleCountByGeneration(generationIndex) = ...
-            sum(~populationDiagnostics.ValidRelativeGapMask);
-
-        currentMask = population > 0;
-        selectedFraction = mean(currentMask, 1);
-        meanBinaryDiversityByGeneration(generationIndex) = ...
-            mean(4 .* selectedFraction .* (1 - selectedFraction));
-        mutationFlipCountByGeneration(generationIndex) = mutationFlipCount;
-        velocitySaturationFractionByGeneration(generationIndex) = ...
-            velocitySaturationFraction;
     end
 end
 

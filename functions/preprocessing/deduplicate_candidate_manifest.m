@@ -6,6 +6,8 @@ function [auditTable, summary] = ...
 %   identities and overlaps with the reference set follow the explicit options.
 %   This function does not infer identities or standardize chemical structures.
 %   Outputs are a row-by-row audit table and summary; SourceRow is an IO locator.
+%   Exact full-identifier matching is not scaffold deduplication or salt/tautomer
+%   standardization; the molecular identity policy is supplied by the manifest.
 
 arguments
     manifestFile (1, 1) string
@@ -90,6 +92,8 @@ if ~isempty(referenceIdentifier)
         ismember(stableIdentifier, referenceIdentifier);
 end
 
+% Select one representative per identifier before background assignment.
+% Keep all rows in the audit so every exclusion maps to its original descriptor row.
 nonmissingRows = find(~isMissingIdentifier);
 identifierGroupSize = zeros(candidateCount, 1);
 representativeSourceRow = nan(candidateCount, 1);

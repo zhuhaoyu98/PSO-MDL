@@ -6,6 +6,8 @@ function [missingCount, infCount, descriptorNames, audit] = ...
 %   Inputs specify the expected row/descriptor counts and chunk size. The two
 %   leading columns must be a consecutive integer and a nonempty molecule name.
 %   Outputs are 1-by-feature counts, ordered descriptor names and a read audit.
+%   NaN and Inf are counted separately. This function neither imputes values
+%   nor decides which descriptors are retained for modeling.
 
 arguments
     filePath (1, 1) string

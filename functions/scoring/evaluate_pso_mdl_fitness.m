@@ -1,17 +1,20 @@
 function [fitnessValue, diagnostics] = ...
     evaluate_pso_mdl_fitness(populationPosition, context)
-%EVALUATE_PSO_MDL_FITNESS Evaluate the batched mean-P objective J=-R*F*P.
-%   Positions are particle-by-feature; position>0 selects a descriptor.
-%   F counts selected descriptors. D1/D2 average Euclidean distances from the
-%   fixed reference medoid to other references/background molecules.
-%   R=(D2-D1)/(D1+epsilon). P averages 100*mean(d_background>d_t)
-%   over nRef-1 non-medoid references, retaining the 0-100 percentage scale.
-%   Equal distances are excluded. P is relative proximity, not absolute compactness.
-%   Empty selections and D1<=epsilon retain the validated zero-fitness rule.
-%   Outputs are particle-by-1 fitness and diagnostic vectors.
-%   Diagnostics.ComparisonKey is K=-R*F*sum(p_t), computed before averaging.
-%   K=(nRef-1)*J in exact arithmetic; PSO compares K to retain the historical
-%   floating-point tie behavior. Returned fitness is J=K/(nRef-1), not K.
+%EVALUATE_PSO_MDL_FITNESS Evaluate J = -R*F*P for a population of descriptor masks.
+%   POPULATIONPOSITION is nParticle-by-p; z_j = (position_j > 0) selects columns.
+%   CONTEXT is the fixed-medoid distance cache from build_fitness_context.
+%
+%   For each particle, d(x,z) = sqrt(sum_j z_j*(x_j-x_medoid,j)^2).
+%   D1 = mean_t(d_t), t excluding the medoid; D2 = mean_b(d_b).
+%   R = (D2-D1)/(D1+epsilon); F = sum_j z_j.
+%   p_t = 100*count_b(d_b > d_t)/nB; P = sum_t(p_t)/(nR-1).
+%   Equal distances do not contribute to p_t. P remains on the 0-100 scale:
+%   it measures background-relative proximity, not absolute reference compactness.
+%
+%   Outputs J and DIAGNOSTICS fields are nParticle-by-1 vectors. Empty subsets
+%   and D1<=epsilon receive J=0. All other objective terms retain their signs.
+%   DIAGNOSTICS.ComparisonKey is K=-R*F*sum_t(p_t), evaluated before averaging.
+%   J=K/(nR-1); PSO compares K directly to preserve floating-point tie decisions.
 
 if ~(isnumeric(populationPosition) || islogical(populationPosition)) ...
         || ~isreal(populationPosition) ...
@@ -72,6 +75,8 @@ if featureCount ~= context.FeatureCount
         featureCount, context.FeatureCount);
 end
 
+%% Descriptor selection and output allocation
+% F counts selected columns, not the sum or magnitude of the latent positions.
 selectedMask = populationPosition > 0;
 selectedFeatureCount = sum(selectedMask, 2);
 fitnessValue = zeros(particleCount, 1);
@@ -86,6 +91,8 @@ validRelativeGapMask = false(particleCount, 1);
 
 activeParticleIndex = find(selectedFeatureCount > 0);
 if ~isempty(activeParticleIndex)
+    % Columns now represent active particles: distances are (nR-1)-by-nActive
+    % and nB-by-nActive. Reductions below average over compounds, not particles.
     activeMaskMatrix = double(selectedMask(activeParticleIndex, :)).';
     targetDistance = sqrt( ...
         context.TargetSquaredDelta * activeMaskMatrix);
@@ -102,18 +109,21 @@ if ~isempty(activeParticleIndex)
     activeD1 = mean(targetDistance, 1).';
     activeD2 = mean(backgroundDistance, 1).';
     activeP = zeros(numel(activeParticleIndex), 1);
-    % Sum unchanged strict-tail percentiles, then average over references.
+    % Reference-specific proximity percentiles: use the strict upper tail of
+    % the background distances. Accumulate before dividing by nR-1, not nR.
     for idxTarget = 1:context.TargetCountEvaluated
         activeP = activeP + sum( ...
             backgroundDistance > targetDistance(idxTarget, :), 1).' ...
             ./ context.BackgroundCount .* 100;
     end
 
-    % The medoid was excluded when the fixed context was built.
+    % The context already excludes the medoid; this is the arithmetic mean P.
     activePSum = activeP;
     activeP = activeP ./ context.TargetCountEvaluated;
 
     activeSeparation = activeD2 - activeD1;
+    % Besides adding epsilon to the denominator, reject D1<=epsilon by the
+    % existing zero-fitness rule. Do not replace this with max(D1,epsilon).
     activeValid = isfinite(activeD1) ...
         & activeD1 > context.DistanceEpsilon ...
         & isfinite(activeD2) & isfinite(activeP) ...
@@ -128,8 +138,8 @@ if ~isempty(activeParticleIndex)
 
     activeD2OverD1(activeValid) = ...
         activeD2(activeValid) ./ activeD1(activeValid);
-    % Preserve the historical multiplication order before normalizing J.
-    % Multiplying an already rounded J cannot recover lost tie distinctions.
+    % K=(nR-1)*J has the same minimizer for a fixed reference set in exact
+    % arithmetic. Compute K first: rescaling an already rounded J may merge ties.
     activeComparisonKey(activeValid) = -activeRelativeGap(activeValid) ...
         .* selectedFeatureCount(activeParticleIndex(activeValid)) ...
         .* activePSum(activeValid);
@@ -152,6 +162,7 @@ if any(~isfinite(fitnessValue)) || any(~isfinite(comparisonKey))
         'Fitness evaluation produced NaN or Inf.');
 end
 
+% Legacy field RelativeGap denotes R; Separation denotes the raw D2-D1.
 if nargout > 1
     diagnostics = struct();
     diagnostics.F = selectedFeatureCount;

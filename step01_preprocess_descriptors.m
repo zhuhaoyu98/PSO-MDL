@@ -1,8 +1,15 @@
 function outputs = step01_preprocess_descriptors(configInput)
-%STEP01_PREPROCESS_DESCRIPTORS Fit imputation and descriptor scales on the frozen training background.
-%   With no input, use the formal profile from functions/pso_mdl_config.m.
-%   CONFIGINPUT can also be a profile name or a configuration structure.
-%   Results are written only under the configured output directory.
+%STEP01_PREPROCESS_DESCRIPTORS Impute and scale a common descriptor space.
+%   Run after Step 00; settings are in functions/pso_mdl_config.m.
+%   An optional configuration structure can specify a separate run.
+%
+%   Input: raw descriptors, fixed partitions and descriptor-availability counts.
+%   Output: data01 = X_R (nReference-by-p), data02 = X_B (nBackground-by-p),
+%   plus the retained columns, background medians and scaling divisors.
+%   Rows are compounds and columns are descriptors. Target fields denote the
+%   reference compounds, not measured response values in a calibration model.
+
+%% 1. Configuration and upstream inputs
 root = fileparts(mfilename('fullpath'));
 addpath(root);
 addpath(fullfile(root, 'functions'));
@@ -46,6 +53,7 @@ missingnessSummaryFile = resolve_input_file( ...
     fullfile(paths.Cache, 'descriptor_missingness_dataset.tsv'), ...
     'Step 00 descriptor missingness summary');
 
+%% 2. Check partition membership and common descriptor order
 expectedDescriptorCount = ...
     double(datasetMetadata.InputDescriptorCount);
 expectedReferenceRows = double(datasetMetadata.ReferenceCount);
@@ -127,6 +135,9 @@ candidateInfCount = ...
 candidateMissingRate = ...
     candidateMissingCount / expectedCandidateRows;
 
+%% 3. Descriptor-availability filtering
+% Library-wide missingness is an availability criterion. The background alone
+% supplies the numerical imputation and scaling estimates used below.
 withinGlobalMissingRate = ...
     candidateMissingRate <= maxGlobalCandidateMissingRate;
 hasFiniteCandidateValue = ...
@@ -188,7 +199,8 @@ globalEligibilityMask = ...
 referenceRaw(~isfinite(referenceRaw)) = NaN;
 backgroundRaw(~isfinite(backgroundRaw)) = NaN;
 
-% Estimate missing-value replacements only from the frozen background.
+%% 4. Background-median imputation
+% Use the same fitted column medians for reference, background and later screening.
 eligibleIndices = find(globalEligibilityMask);
 backgroundEligible = backgroundRaw(:, eligibleIndices);
 imputationValuesEligible = median( ...
@@ -229,7 +241,9 @@ assert(all(isfinite(backgroundModelInput), 'all') && ...
     all(isfinite(referenceModelInput), 'all'), ...
     'Nonfinite values remain after median imputation.');
 
-% MATLAB mad(X,0,1) is mean absolute deviation about the mean, not median AD.
+%% 5. Descriptor scaling and name-based emphasis
+% s_j = mean_b |x_bj - mean_b(x_bj)|, evaluated after background imputation.
+% MATLAB mad(X,0,1) computes this mean absolute deviation, not median AD.
 scaleSampleRows = 1:scaleSampleStride:expectedBackgroundRows;
 rawMadModel = mad( ...
     backgroundModelInput(scaleSampleRows, :), 0, 1);
@@ -241,9 +255,12 @@ weightedMaskOriginal = false(1, expectedDescriptorCount);
 weightedMaskOriginal(weightedIndices) = true;
 weightedMaskModelInput = ...
     weightedMaskOriginal(modelInputIndices);
+% WeightFactor multiplies the divisor, not the distance. A factor of 0.2
+% increases that column's distance contribution by 5 (25 in squared distance).
 normalizationScaleModel(weightedMaskModelInput) = ...
     normalizationScaleModel(weightedMaskModelInput) * weightFactor;
 
+% Apply the scale threshold after emphasis; discard unusable columns globally.
 retainedWithinModelInput = ...
     isfinite(normalizationScaleModel) & ...
     normalizationScaleModel >= nearZeroThreshold;
@@ -257,7 +274,9 @@ normalizationScale = ...
 retainedDescriptorHeaders = descriptorNames(retainedMask);
 weightedMaskRetained = weightedMaskOriginal(retainedMask);
 
-% Apply the same frozen divisors to reference and background, without centering.
+%% 6. Apply the common transformation: x_scaled,j = x_imputed,j / s_j
+% Scaling only: no mean centering, unit-variance scaling or row normalization.
+% The same retained columns and divisors are reused unchanged in Step 03.
 data01 = referenceModelInput(:, retainedWithinModelInput) ./ ...
     normalizationScale;
 data02 = backgroundModelInput(:, retainedWithinModelInput) ./ ...
@@ -271,6 +290,8 @@ assert(size(data01, 1) == expectedReferenceRows && ...
     size(data01, 2) == size(data02, 2), ...
     'Final data01/data02 dimensions disagree with expected values.');
 
+%% 7. Export matrices and the complete preprocessing specification
+% Keep original-column indices so raw screening data map to the same p columns.
 excludedByGlobalMissingness = nnz(~withinGlobalMissingRate);
 excludedByOtherAvailability = ...
     nnz(withinGlobalMissingRate & ~globalEligibilityMask);

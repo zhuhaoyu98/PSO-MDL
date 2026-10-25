@@ -6,6 +6,8 @@ function [selectedData, moleculeNames, selectedDescriptorNames, audit] = ...
 %   Inputs specify 1-based unique descriptor indices, expected dimensions and
 %   chunk/progress sizes. The two leading identifier columns are not descriptors.
 %   Outputs retain all molecules and return requested columns in input order.
+%   SELECTEDDATA is nCompound-by-numel(SELECTEDDESCRIPTORINDICES), in raw units.
+%   Use descriptor indices 1:p, not text-column indices that include No. and NAME.
 
 arguments
     filePath (1, 1) string

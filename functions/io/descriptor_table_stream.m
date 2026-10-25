@@ -5,6 +5,8 @@ function stream = descriptor_table_stream(sourcePath)
 %   original global No. values. READ uses textscan options and returns full
 %   logical chunks across part boundaries; no descriptor values are refitted.
 %   Call CLOSE, normally through onCleanup, to release the current file.
+%   Structural checks here cover part order, sizes, headers and row continuity;
+%   full part SHA-256 verification is performed by Step 00 when enabled.
 arguments
     sourcePath (1, 1) string
 end

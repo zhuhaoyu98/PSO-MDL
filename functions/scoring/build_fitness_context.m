@@ -1,11 +1,15 @@
 function context = build_fitness_context( ...
     targetData, backgroundData, distanceEpsilon)
-%BUILD_FITNESS_CONTEXT Build the fixed-medoid context for J=-R*F*P.
-%   Reference and background inputs are finite row-by-feature double matrices.
-%   The medoid minimizes total Euclidean distance in the full retained space.
-%   R=(D2-D1)/(D1+epsilon); P is the mean non-medoid background-relative
-%   proximity percentile (0-100, strict background distance > reference distance).
-%   Squared per-feature differences are cached without changing distance arithmetic.
+%BUILD_FITNESS_CONTEXT Define the reference origin and cache distance components.
+%   TARGETDATA = X_R (nR-by-p) and BACKGROUNDDATA = X_B (nB-by-p) are finite,
+%   already imputed/scaled matrices. Rows are compounds; columns are descriptors.
+%   Target denotes the reference set, not a measured response or protein target.
+%
+%   The fixed medoid minimizes the sum of Euclidean distances to the nR
+%   references in the full retained space. It is not refitted in each subset.
+%   CONTEXT stores its row index, scaled coordinates and squared differences
+%   for the nR-1 other references and all nB background compounds.
+%   DISTANCEEPSILON is the positive constant in R=(D2-D1)/(D1+epsilon).
 
 arguments
     targetData double
@@ -37,13 +41,16 @@ if ~(isfinite(distanceEpsilon) && distanceEpsilon > 0)
         'distanceEpsilon must be a finite, strictly positive scalar.');
 end
 
-% Determine the medoid once in the full retained descriptor space.
+%% Fixed medoid in the full retained descriptor space
+% Equivalent to pairwise Euclidean distances; clamp round-off below zero before
+% the square root. MATLAB min selects the first row when total distances tie.
 rowSquaredNorm = sum(targetData.^2, 2);
 squaredDistance = rowSquaredNorm + rowSquaredNorm.' ...
     - 2 .* (targetData * targetData.');
 squaredDistance = max(squaredDistance, 0);
 [~, referenceIndex] = min(sum(sqrt(squaredDistance), 2));
 
+% Exclude the zero self-distance from D1 and the reference-percentile average P.
 referenceDrug = targetData(referenceIndex, :);
 targetMask = true(size(targetData, 1), 1);
 targetMask(referenceIndex) = false;
@@ -67,6 +74,9 @@ context.D1ValidityRule = 'D1 > epsilon';
 context.ReferenceIndex = referenceIndex;
 context.ReferenceDrug = referenceDrug;
 context.TargetWithoutReference = targetWithoutReference;
+%% Cached squared coordinate differences
+% A subset mask selects columns in these matrices before taking square roots;
+% distances are Euclidean, not mean squared or root-mean-square distances.
 context.TargetSquaredDelta = (targetWithoutReference - referenceDrug).^2;
 context.BackgroundSquaredDelta = (backgroundData - referenceDrug).^2;
 if any(~isfinite(context.TargetSquaredDelta), 'all') ...

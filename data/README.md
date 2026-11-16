@@ -55,7 +55,7 @@ Run the five root Step files in MATLAB. They create `results/research/`:
 | 01 | Step 00 outputs and raw descriptors | cache/data01_model.mat, data02_background.mat, preprocess_metadata.mat |
 | 02 | Step 01 matrices and metadata | models.mat, optimization histories and summaries; 64 new runs × 3,000 generations |
 | 03 | Steps 00–02 outputs and raw candidate descriptors | candidate_ranking.tsv/.mat and rank-stability statistics |
-| 04 | Current Step 02/03 outputs | figures/FIG3A–C and FIG4A–E, as PNG and PDF |
+| 04 | Current Step 02/03 outputs | Result plots in `figures/` (PNG and PDF) |
 
 Intermediate files are generated locally, not required as initial inputs.
 To repeat the workflow without overwriting an existing run, select a new

@@ -1,10 +1,10 @@
 function outputs = step04_generate_figures(configInput)
-%STEP04_GENERATE_FIGURES Plot Figures 3 and 4 from the current run.
+%STEP04_GENERATE_FIGURES Plot optimization and ranking results from the current run.
 %   Run after Steps 02-03; figure settings are in functions/pso_mdl_config.m.
 %   An optional configuration structure can specify a separate run.
 %
 %   Input: this run's saved model summaries, optimization histories and ranks.
-%   Output: eight PNG/PDF panels, their source statistics and figure legends.
+%   Output: descriptively named PNG/PDF plots, source statistics and figure legends.
 %   Shading shows empirical quartiles, not confidence intervals. Plotting does
 %   not retrain models, change descriptor subsets or reorder screening compounds.
 arguments
@@ -315,18 +315,19 @@ ensembleSummaryFile = fullfile(resultDir, ...
 writetable(ensembleSummaryTable, ensembleSummaryFile, ...
     'FileType', 'text', 'Delimiter', '\t');
 
-%% 5. Panel names and common plotting settings
-fig3aBase = fullfile(figureDir, 'FIG3A');
-fig3bBase = fullfile(figureDir, 'FIG3B');
-fig3cBase = fullfile(figureDir, 'FIG3C');
-fig4aBase = fullfile(figureDir, 'FIG4A');
-fig4bBase = fullfile(figureDir, 'FIG4B');
-fig4dBase = fullfile(figureDir, 'FIG4D');
-fig4eBase = fullfile(figureDir, 'FIG4E');
-fig4cBase = fullfile(figureDir, 'FIG4C');
+%% 5. Plot names and common settings
+objectiveBase = fullfile(figureDir, 'objective_convergence');
+selectedCountBase = fullfile(figureDir, 'selected_descriptors');
+separationBase = fullfile(figureDir, 'descriptor_count_vs_separation');
+selectionFrequencyBase = fullfile(figureDir, 'descriptor_selection_frequency');
+modelTopKBase = fullfile(figureDir, 'model_topk_agreement');
+ensembleRankBase = fullfile(figureDir, 'ensemble_rank_agreement');
+ensembleTopKBase = fullfile(figureDir, 'ensemble_topk_agreement');
+candidateUncertaintyBase = fullfile(figureDir, 'candidate_rank_uncertainty');
 
-allFigureBases = {fig3aBase, fig3bBase, fig3cBase, fig4aBase, ...
-    fig4bBase, fig4dBase, fig4eBase, fig4cBase};
+allFigureBases = {objectiveBase, selectedCountBase, separationBase, ...
+    selectionFrequencyBase, modelTopKBase, ensembleRankBase, ...
+    ensembleTopKBase, candidateUncertaintyBase};
 for baseIndex = 1:numel(allFigureBases)
     localPrepareFigureOutput(allFigureBases{baseIndex}, overwriteExistingFigures);
 end
@@ -337,7 +338,6 @@ figureVisibility = visibilityOptions{1 + double(showFiguresOnScreen)};
 blue = [0, 114, 178] ./ 255;
 lightBlue = [86, 180, 233] ./ 255;
 vermillion = [213, 94, 0] ./ 255;
-lightOrange = [0.96, 0.82, 0.64];
 lightGray = [0.72, 0.72, 0.72];
 darkGray = [0.30, 0.30, 0.30];
 
@@ -354,11 +354,12 @@ jaccardMedian = double(step03JaccardTable.MedianJaccard);
 jaccardQ1 = double(step03JaccardTable.JaccardQ1);
 jaccardQ3 = double(step03JaccardTable.JaccardQ3);
 
-%% Figure 3A. Best-so-far objective: median and interquartile range across seeds
+%% Objective convergence
 % FitnessDisplayScale changes displayed units only; saved J values are unchanged.
-fig3a = figure('Visible', figureVisibility, 'Color', 'w', ...
+objectiveFigure = figure('Name', 'Objective convergence', 'NumberTitle', 'off', ...
+    'Visible', figureVisibility, 'Color', 'w', ...
     'Units', 'centimeters', 'Position', [2, 2, regularFigureSizeCm(1), regularFigureSizeCm(2)]);
-ax = axes(fig3a);
+ax = axes(objectiveFigure);
 hold(ax, 'on');
 fill(ax, [generation; flipud(generation)], ...
     [fitnessQ1; flipud(fitnessQ3)] ./ fitnessDisplayScale, ...
@@ -372,19 +373,20 @@ ax.YAxis.Exponent = 0;
 xlim(ax, [1, generationCount]);
 hold(ax, 'off');
 drawnow;
-export_publication_figure(fig3a, fig3aBase, figureResolutionDpi);
+export_publication_figure(objectiveFigure, objectiveBase, figureResolutionDpi);
 
-%% Figure 3B. Descriptor count of the corresponding best-so-far solutions
+%% Selected descriptors
 % F follows the best solution; it need not increase monotonically with generation.
-fig3b = figure('Visible', figureVisibility, 'Color', 'w', ...
+selectedCountFigure = figure('Name', 'Selected descriptors', 'NumberTitle', 'off', ...
+    'Visible', figureVisibility, 'Color', 'w', ...
     'Units', 'centimeters', 'Position', [2, 2, regularFigureSizeCm(1), regularFigureSizeCm(2)]);
-ax = axes(fig3b);
+ax = axes(selectedCountFigure);
 hold(ax, 'on');
 fill(ax, [generation; flipud(generation)], ...
     [descriptorQ1; flipud(descriptorQ3)], ...
-    lightOrange, 'EdgeColor', 'none', 'FaceAlpha', 0.50, 'HandleVisibility', 'off');
+    lightGray, 'EdgeColor', 'none', 'FaceAlpha', 0.50, 'HandleVisibility', 'off');
 plot(ax, generation, descriptorMedian, ...
-    'Color', vermillion, 'LineWidth', 1.55, 'HandleVisibility', 'off');
+    'Color', darkGray, 'LineWidth', 1.55, 'HandleVisibility', 'off');
 xlabel(ax, 'PSO generation');
 ylabel(ax, 'Number of selected descriptors');
 localStyleAxes(ax, figureFontName, baseFontSizePt);
@@ -392,12 +394,13 @@ xlim(ax, [1, generationCount]);
 ylim(ax, localRoundedDataRange([descriptorQ1; descriptorQ3], 100));
 hold(ax, 'off');
 drawnow;
-export_publication_figure(fig3b, fig3bBase, figureResolutionDpi);
+export_publication_figure(selectedCountFigure, selectedCountBase, figureResolutionDpi);
 
-%% Figure 3C. One final (F,R) observation per independent PSO run
-fig3c = figure('Visible', figureVisibility, 'Color', 'w', ...
+%% Descriptor count and separation
+separationFigure = figure('Name', 'Descriptor count and separation', 'NumberTitle', 'off', ...
+    'Visible', figureVisibility, 'Color', 'w', ...
     'Units', 'centimeters', 'Position', [2, 2, regularFigureSizeCm(1), regularFigureSizeCm(2)]);
-ax = axes(fig3c);
+ax = axes(separationFigure);
 hold(ax, 'on');
 scatter(ax, finalF, finalRelativeGap, 26, blue, 'filled', ...
     'MarkerFaceAlpha', 0.78, 'MarkerEdgeColor', 'w', 'LineWidth', 0.45);
@@ -411,13 +414,14 @@ text(ax, 0.97, 0.96, sprintf('\\rho = %s%.3f\nn = %d', char(8722), abs(rhoFvsR),
     'FontSize', baseFontSizePt, 'Color', darkGray, 'Interpreter', 'tex');
 hold(ax, 'off');
 drawnow;
-export_publication_figure(fig3c, fig3cBase, figureResolutionDpi);
+export_publication_figure(separationFigure, separationBase, figureResolutionDpi);
 
-%% Figure 4A. Descriptor-selection frequencies, ordered for display only
+%% Descriptor selection frequency
 % A frequency is a fraction of models, not a coefficient in the distance metric.
-fig4a = figure('Visible', figureVisibility, 'Color', 'w', ...
+selectionFrequencyFigure = figure('Name', 'Descriptor selection frequency', 'NumberTitle', 'off', ...
+    'Visible', figureVisibility, 'Color', 'w', ...
     'Units', 'centimeters', 'Position', [2, 2, regularFigureSizeCm(1), regularFigureSizeCm(2)]);
-ax = axes(fig4a);
+ax = axes(selectionFrequencyFigure);
 hold(ax, 'on');
 sortedFeatureFrequency = sort(featureSelectionFrequency, 'descend');
 frequencyOrder = (1:numel(sortedFeatureFrequency)).';
@@ -430,12 +434,13 @@ set(ax, 'YLim', [0, 1], 'YGrid', 'off');
 xlim(ax, [1, numel(sortedFeatureFrequency)]);
 hold(ax, 'off');
 drawnow;
-export_publication_figure(fig4a, fig4aBase, figureResolutionDpi);
+export_publication_figure(selectionFrequencyFigure, selectionFrequencyBase, figureResolutionDpi);
 
-%% Figure 4B. Pairwise agreement of single-model Top-K candidate sets
-fig4b = figure('Visible', figureVisibility, 'Color', 'w', ...
+%% Model Top-K agreement
+modelTopKFigure = figure('Name', 'Model Top-K agreement', 'NumberTitle', 'off', ...
+    'Visible', figureVisibility, 'Color', 'w', ...
     'Units', 'centimeters', 'Position', [2, 2, regularFigureSizeCm(1), regularFigureSizeCm(2)]);
-ax = axes(fig4b);
+ax = axes(modelTopKFigure);
 hold(ax, 'on');
 fill(ax, [topK; flipud(topK)], [jaccardQ1; flipud(jaccardQ3)], ...
     lightBlue, 'EdgeColor', 'none', 'FaceAlpha', 0.28, 'HandleVisibility', 'off');
@@ -455,18 +460,19 @@ ylabel(ax, 'Pairwise Jaccard index');
 localStyleAxes(ax, figureFontName, baseFontSizePt);
 hold(ax, 'off');
 drawnow;
-export_publication_figure(fig4b, fig4bBase, figureResolutionDpi);
+export_publication_figure(modelTopKFigure, modelTopKBase, figureResolutionDpi);
 
-%% Figure 4D. Full-ranking agreement between disjoint ensembles
-fig4d = figure('Visible', figureVisibility, 'Color', 'w', ...
+%% Ensemble rank agreement
+ensembleRankFigure = figure('Name', 'Ensemble rank agreement', 'NumberTitle', 'off', ...
+    'Visible', figureVisibility, 'Color', 'w', ...
     'Units', 'centimeters', 'Position', [2, 2, regularFigureSizeCm(1), regularFigureSizeCm(2)]);
-ax = axes(fig4d);
+ax = axes(ensembleRankFigure);
 hold(ax, 'on');
 fill(ax, [ensembleSubsetSizes(:); flipud(ensembleSubsetSizes(:))], ...
     [ensembleSpearmanQ1; flipud(ensembleSpearmanQ3)], ...
     lightBlue, 'EdgeColor', 'none', 'FaceAlpha', 0.28, 'HandleVisibility', 'off');
 plot(ax, ensembleSubsetSizes, ensembleSpearmanMedian, '-o', ...
-    'Color', blue, 'MarkerFaceColor', blue, 'MarkerEdgeColor', 'w', ...
+    'Color', blue, 'MarkerFaceColor', blue, 'MarkerEdgeColor', 'none', ...
     'MarkerSize', 4.2, 'LineWidth', 1.35);
 set(ax, 'XScale', 'log');
 xticks(ax, ensembleSubsetSizes);
@@ -480,18 +486,19 @@ ylabel(ax, 'Spearman \rho between ensembles');
 localStyleAxes(ax, figureFontName, baseFontSizePt);
 hold(ax, 'off');
 drawnow;
-export_publication_figure(fig4d, fig4dBase, figureResolutionDpi);
+export_publication_figure(ensembleRankFigure, ensembleRankBase, figureResolutionDpi);
 
-%% Figure 4E. Top-K set agreement between disjoint ensembles
-fig4e = figure('Visible', figureVisibility, 'Color', 'w', ...
+%% Ensemble Top-K agreement
+ensembleTopKFigure = figure('Name', 'Ensemble Top-K agreement', 'NumberTitle', 'off', ...
+    'Visible', figureVisibility, 'Color', 'w', ...
     'Units', 'centimeters', 'Position', [2, 2, regularFigureSizeCm(1), regularFigureSizeCm(2)]);
-ax = axes(fig4e);
+ax = axes(ensembleTopKFigure);
 hold(ax, 'on');
 fill(ax, [ensembleSubsetSizes(:); flipud(ensembleSubsetSizes(:))], ...
     [ensembleTopKQ1; flipud(ensembleTopKQ3)], ...
-    lightOrange, 'EdgeColor', 'none', 'FaceAlpha', 0.45, 'HandleVisibility', 'off');
+    lightGray, 'EdgeColor', 'none', 'FaceAlpha', 0.45, 'HandleVisibility', 'off');
 plot(ax, ensembleSubsetSizes, ensembleTopKMedian, '-o', ...
-    'Color', vermillion, 'MarkerFaceColor', vermillion, 'MarkerEdgeColor', 'w', ...
+    'Color', darkGray, 'MarkerFaceColor', darkGray, 'MarkerEdgeColor', 'none', ...
     'MarkerSize', 4.2, 'LineWidth', 1.35);
 set(ax, 'XScale', 'log');
 xticks(ax, ensembleSubsetSizes);
@@ -503,13 +510,14 @@ ylabel(ax, sprintf('Top-%d Jaccard between ensembles', actualEnsembleTopK));
 localStyleAxes(ax, figureFontName, baseFontSizePt);
 hold(ax, 'off');
 drawnow;
-export_publication_figure(fig4e, fig4eBase, figureResolutionDpi);
+export_publication_figure(ensembleTopKFigure, ensembleTopKBase, figureResolutionDpi);
 
-%% Figure 4C. Cross-model ranks of the final top candidates
+%% Candidate rank uncertainty
 % P10-P90 and min-max describe variation across models, not sampling-error bounds.
-fig4c = figure('Visible', figureVisibility, 'Color', 'w', ...
+candidateUncertaintyFigure = figure('Name', 'Candidate rank uncertainty', 'NumberTitle', 'off', ...
+    'Visible', figureVisibility, 'Color', 'w', ...
     'Units', 'centimeters', 'Position', [2, 2, tallFigureSizeCm(1), tallFigureSizeCm(2)]);
-ax = axes(fig4c);
+ax = axes(candidateUncertaintyFigure);
 hold(ax, 'on');
 candidateY = (1:candidateFigureCount).';
 
@@ -546,7 +554,7 @@ legend(ax, [meanLegend, percentileLegend, rangeLegend], ...
     'Location', 'southoutside', 'Box', 'off', 'FontSize', 7);
 hold(ax, 'off');
 drawnow;
-export_publication_figure(fig4c, fig4cBase, figureResolutionDpi);
+export_publication_figure(candidateUncertaintyFigure, candidateUncertaintyBase, figureResolutionDpi);
 
 %% 6. Export figure legends and verify the eight PNG/PDF pairs
 legendFile = fullfile(resultDir, 'figure_legends.txt');
@@ -554,42 +562,40 @@ legendId = fopen(legendFile, 'w', 'n', 'UTF-8');
 assert(legendId >= 0, 'Cannot write figure legends: %s', legendFile);
 legendCleanup = onCleanup(@() fclose(legendId));
 
-fprintf(legendId, ['FIG3A | Best-so-far objective values across %d independent PSO runs. ' ...
+fprintf(legendId, ['Objective convergence | Best-so-far objective values across %d independent PSO runs. ' ...
     'The solid line denotes the median and the shading denotes the 25th-75th percentile interval. ' ...
     ['All runs used %d PSO generations. P is the mean background-relative ' ...
      'proximity percentile across non-medoid references (0-100 scale). ' ...
      'Fitness values are displayed in units of 10^6.\n\n']], ...
     modelCount, generationCount);
 
-fprintf(legendId, ['FIG3B | Number of selected descriptors in the corresponding global-best solutions ' ...
+fprintf(legendId, ['Selected descriptors | Number of selected descriptors in the corresponding global-best solutions ' ...
     'across %d independent PSO runs, summarized as median and 25th-75th percentile interval.\n\n'], modelCount);
 
-fprintf(legendId, ['FIG3C | Relationship between the final descriptor count F and the relative gap R. ' ...
-    'Each point represents one independent PSO run. The inset reports Spearman rho.\n\n']);
+fprintf(legendId, ['Descriptor count and separation | Relationship between the final descriptor count F and the relative gap R. ' ...
+    'Each point represents one independent PSO run. The annotation reports Spearman rho.\n\n']);
 
-fprintf(legendId, ['FIG4A | Descriptor selection frequencies across the final models, ordered from highest ' ...
+fprintf(legendId, ['Descriptor selection frequency | Descriptor selection frequencies across the final models, ordered from highest ' ...
     'to lowest frequency.\n\n']);
 
-fprintf(legendId, ['FIG4B | Pairwise Jaccard similarity of single-model Top-K candidate sets. ' ...
+fprintf(legendId, ['Model Top-K agreement | Pairwise Jaccard similarity of single-model Top-K candidate sets. ' ...
     'The line and shading denote the median and the 25th-75th percentile interval across %d model pairs.\n\n'], expectedPairCount);
 
-fprintf(legendId, ['FIG4D | Full-ranking agreement between two mutually exclusive M-model ensembles sampled from the %d independent PSO runs. ' ...
+fprintf(legendId, ['Ensemble rank agreement | Full-ranking agreement between two mutually exclusive M-model ensembles sampled from the %d independent PSO runs. ' ...
     'Spearman correlations were calculated over %d reproducible random splits; lines and shading denote medians and 25th-75th percentiles.\n\n'], modelCount, ensembleStabilityRepeats);
 
-fprintf(legendId, ['FIG4E | Top-%d candidate-set agreement between two mutually exclusive M-model ensembles. ' ...
+fprintf(legendId, ['Ensemble Top-K agreement | Top-%d candidate-set agreement between two mutually exclusive M-model ensembles. ' ...
     'Jaccard similarities were calculated over %d reproducible random splits; lines and shading denote medians and 25th-75th percentiles.\n\n'], actualEnsembleTopK, ensembleStabilityRepeats);
 
-fprintf(legendId, ['FIG4C | Model-specific rank uncertainty for the final mean-rank Top %d candidates. ' ...
+fprintf(legendId, ['Candidate rank uncertainty | Model-specific rank uncertainty for the final mean-rank Top %d candidates. ' ...
     'Orange points denote arithmetic mean ranks, blue intervals denote the 10th-90th percentiles, and grey intervals ' ...
     'denote the full minimum-maximum range. Lower ranks indicate higher priority.\n'], candidateFigureCount);
 clear legendCleanup
 
-allRequiredBases = {fig3aBase, fig3bBase, fig3cBase, fig4aBase, ...
-    fig4bBase, fig4dBase, fig4eBase, fig4cBase};
-for baseIndex = 1:numel(allRequiredBases)
-    assert(isfile([allRequiredBases{baseIndex} '.png']) ...
-        && isfile([allRequiredBases{baseIndex} '.pdf']), ...
-        'Both PNG and PDF must be generated: %s', allRequiredBases{baseIndex});
+for baseIndex = 1:numel(allFigureBases)
+    assert(isfile([allFigureBases{baseIndex} '.png']) ...
+        && isfile([allFigureBases{baseIndex} '.pdf']), ...
+        'Both PNG and PDF must be generated: %s', allFigureBases{baseIndex});
 end
 assert(isfile(correlationFile) && isfile(ensembleLongFile) ...
     && isfile(ensembleSummaryFile) && isfile(legendFile), ...
@@ -607,7 +613,7 @@ fprintf('\n============================================================\n');
 fprintf('Step 04 individual figures generated.\n');
 fprintf('Models: %d seeds x %d generations.\n', modelCount, generationCount);
 fprintf('F vs relative gap Spearman rho = %.4f.\n', rhoFvsR);
-fprintf('FIG3A-C and FIG4A-E exported to: %s\n', figureDir);
+fprintf('Result plots exported to: %s\n', figureDir);
 fprintf('Independent ensemble-size source: %s\n', ensembleSummaryFile);
 fprintf('Figure legends: %s\n', legendFile);
 fprintf('============================================================\n');

@@ -35,11 +35,12 @@ step04_generate_figures
 | 01 | Step 00 outputs and raw descriptors | Reference/background matrices and fitted preprocessing |
 | 02 | Step 01 matrices and preprocessing metadata | 64 newly trained models, optimization histories and statistics |
 | 03 | Steps 00–02 outputs and raw candidate descriptors | `candidate_ranking.tsv`, single-model ranks and stability statistics |
-| 04 | This run's Step 02/03 outputs | Figure 3A–C and Figure 4A–E, each as PNG and PDF |
+| 04 | This run's Step 02/03 outputs | Result plots (PNG and PDF) |
 
 All generated files go to `results/research/`, relative to the project root.
 Each Step reads existing upstream outputs. Steps 02 and 03 save results and
-plot-source tables; Step 04 generates all publication figures from this run.
+plot-source tables. Step 04 saves the result plots with descriptive filenames in
+this run's `figures/` folder.
 For a separate repeat run, change only `cfg.Output.Directory` in
 `functions/pso_mdl_config.m` to a new directory. Existing outputs are protected
 by default. Other input paths and research parameters are configured in that
